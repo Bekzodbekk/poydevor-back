@@ -1,0 +1,8 @@
+services:
+  workers-service:
+    host: localhost
+    port: 8081
+
+  api-gateway:
+    host: localhost
+    port: 8080

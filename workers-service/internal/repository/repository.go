@@ -1,0 +1,14 @@
+package repository
+
+import (
+	"context"
+	"workers-service/genproto/workerspb"
+)
+
+type IWorkersRepository interface {
+	AddWorkers(ctx context.Context, req *workerspb.AddWorkersReq) (*workerspb.AddWorkersResp, error)
+	GetWorkers(ctx context.Context, req *workerspb.GetWorkersReq) (*workerspb.GetWorkersResp, error)
+	EndDay(ctx context.Context, req *workerspb.EndDayReq) (*workerspb.EndDayResp, error)
+	LoadBlocks(ctx context.Context, req *workerspb.LoadBlocksReq) (*workerspb.LoadBlocksResp, error)
+	MonthlyReport(ctx context.Context, req *workerspb.MonthlyReportReq) (*workerspb.MonthlyReportResp, error)
+}

@@ -1,0 +1,8 @@
+CREATE TABLE IF NOT EXISTS daily_production (
+    id SERIAL PRIMARY KEY,
+    date DATE NOT NULL,
+    count_blocks INT NOT NULL,
+    created_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    updated_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP,
+    deleted_at INT DEFAULT 0
+);
