@@ -17,7 +17,9 @@ func NewGin(service *service.ServiceRepositoryClient) *gin.Engine {
 	r.POST("/v1/workers/add-worker", newHandlers.AddWorkers)
 	r.POST("/v1/workers/end-day", newHandlers.EndDay)
 	r.POST("/v1/workers/load-blocks", newHandlers.LoadBlocks)
+	r.POST("/v1/workers/paid_monthly/:worker_id", newHandlers.AddPaidMonthly)
 	r.GET("/v1/workers/all-workers", newHandlers.AllWorkers)
+	r.GET("/v1/workers/monthly-report/:worker_id", newHandlers.MonthlyReport)
 
 	return r
 }

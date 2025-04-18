@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"api-gateway/genproto/workerspb"
+	"strconv"
 
 	"github.com/gin-gonic/gin"
 )
@@ -59,6 +60,43 @@ func (h *HandlersST) LoadBlocks(ctx *gin.Context) {
 	}
 
 	resp, err := h.service.LoadBlocks(ctx, &req)
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
+	ctx.JSON(200, resp)
+}
+
+func (h *HandlersST) MonthlyReport(ctx *gin.Context) {
+	workerId := ctx.Param("worker_id")
+
+	resp, err := h.service.MonthlyReport(ctx, &workerspb.MonthlyReportReq{
+		Id: workerId,
+	})
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
+	ctx.JSON(200, resp)
+}
+
+func (h *HandlersST) AddPaidMonthly(ctx *gin.Context) {
+	workerId := ctx.Param("worker_id")
+	req := workerspb.PaidWorkerMonthlyReq{}
+	if err := ctx.BindJSON(&req); err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+	worker_id, err := strconv.Atoi(workerId)
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+	req.WorkerId = int64(worker_id)
+
+	resp, err := h.service.AddPaidMonthly(ctx, &req)
 	if err != nil {
 		ctx.JSON(400, err.Error())
 		return

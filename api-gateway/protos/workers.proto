@@ -3,95 +3,111 @@ syntax = "proto3";
 option go_package = "genproto/workerspb";
 
 service WorkersService{
-    rpc AddWorkers(AddWorkersReq) returns (AddWorkersResp);
-    rpc GetWorkers(GetWorkersReq) returns (GetWorkersResp);
-    rpc EndDay(EndDayReq) returns (EndDayResp);
-    rpc LoadBlocks(LoadBlocksReq) returns (LoadBlocksResp);
-    rpc MonthlyReport(MonthlyReportReq) returns (MonthlyReportResp);
+rpc AddWorkers(AddWorkersReq) returns (AddWorkersResp);
+rpc GetWorkers(GetWorkersReq) returns (GetWorkersResp);
+rpc EndDay(EndDayReq) returns (EndDayResp);
+rpc LoadBlocks(LoadBlocksReq) returns (LoadBlocksResp);
+rpc MonthlyReport(MonthlyReportReq) returns (MonthlyReportResp);
+rpc AddPaidMonthly(PaidWorkerMonthlyReq) returns (PaidWorkerMonthlyResp);
 }
 
 
 // Create Worker
 message AddWorkersReq{
-    string id = 1;
-    string first_name = 2;
-    string last_name = 3;
-    string phone_number = 4;
+string id = 1;
+string first_name = 2;
+string last_name = 3;
+string phone_number = 4;
 }
 message AddWorkersResp{
-    bool status = 1;
-    string message = 2;
+bool status = 1;
+string message = 2;
 }
 
 // Get Workers
 message Worker{
-    string id = 1;
-    string first_name = 2;
-    string last_name = 3;
-    string phone_number = 4;
+string id = 1;
+string first_name = 2;
+string last_name = 3;
+string phone_number = 4;
 }
 message GetWorkersReq{
 }
 message GetWorkersResp{
-    repeated Worker workers = 1;
+repeated Worker workers = 1;
 }
 
 
 // EndDay
 message EndDayReq{
-    string id = 1;
-    string date = 2;
-    int32 count_blocks = 3;
-    repeated int32 workers = 4;
+string id = 1;
+string date = 2;
+int32 count_blocks = 3;
+repeated int32 workers = 4;
 }
 message EndDayResp{
-    bool status = 1;
-    string message = 2;
+bool status = 1;
+string message = 2;
 }
 
 // LoadBlocks
 message LoadBlocksReq{
-    string id = 1;
-    string date = 2;
-    string address = 3;
-    int64 count_blocks = 4;
-    int64 price_block = 5;
-    repeated int32  workers = 6;
+string id = 1;
+string date = 2;
+string address = 3;
+int64 count_blocks = 4;
+int64 price_block = 5;
+repeated int32  workers = 6;
 }
 message LoadBlocksResp{
-    bool status = 1;
-    string message = 2;
+bool status = 1;
+string message = 2;
 }
 
 
 
 // MonthlyReport
 message MonthlyReportReq{
-    string id = 1;
+string id = 1;
 }
 message EndDayData{
-    string date = 1;
-    string count_blocks = 2;
-    int32 workers_count = 3;
-    int64 total_price = 4;
+string date = 1;
+int32 count_blocks = 2;
+int32 workers_count = 3;
+int32 worker_share = 4;
+int64 total_price = 5;
 }
 message LoadBlocksData{
-    string date = 1;
-    string count_blocks = 2;
-    int32 workers_count = 3;
-    int64 total_price = 4;
+string date = 1;
+int32 count_blocks = 2;
+int32 workers_count = 3;
+int32 blocks_per_worker = 4;
+int64 total_price = 5;
 }
 message PaidMonthly{
-    string date = 1;
-    int64 paid_price = 2;
+string date = 1;
+int64 paid_price = 2;
 }
 message MonthlyReportResp{
-    // EndDayData
-    repeated EndDayData end_day_data = 1;
-    
-    // LoadBlocksData
-    repeated LoadBlocksData load_blocks_data = 2;
+// EndDayData
+repeated EndDayData end_day_data = 1;
 
-    // PaidMonthly
-    repeated PaidMonthly paid_monthly = 3;
+// LoadBlocksData
+repeated LoadBlocksData load_blocks_data = 2;
+
+// PaidMonthly
+repeated PaidMonthly paid_monthly = 3;
+}
+
+
+
+
+// PaidWorkerMonthly
+message PaidWorkerMonthlyReq{
+    int64 paid_price = 1;
+    int64 worker_id = 2;
+}
+message PaidWorkerMonthlyResp{
+    bool status = 1;
+    string message = 2;
 }

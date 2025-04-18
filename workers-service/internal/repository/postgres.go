@@ -161,5 +161,75 @@ func (w *WorkersREPO) LoadBlocks(ctx context.Context, req *workerspb.LoadBlocksR
 }
 
 func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyReportReq) (*workerspb.MonthlyReportResp, error) {
-	return nil, nil
+	worker_id, err := strconv.Atoi(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	endDayResp, err := w.queries.EndDayDataMonthlyReport(ctx, int32(worker_id))
+	if err != nil {
+		return nil, err
+	}
+	endDayData := []*workerspb.EndDayData{}
+
+	for _, elm := range endDayResp {
+		endDay := workerspb.EndDayData{
+			Date:         elm.Date.GoString(),
+			CountBlocks:  elm.TotalBlocks,
+			WorkersCount: int32(elm.WorkerCount),
+			WorkerShare:  int32(elm.WorkerShare),
+			TotalPrice:   int64(elm.WorkerPayment),
+		}
+		endDayData = append(endDayData, &endDay)
+	}
+
+	loadBlocksData := []*workerspb.LoadBlocksData{}
+	loadBlocksDataResp, err := w.queries.LoadBlocksDataMonthlyReport(ctx, int32(worker_id))
+	if err != nil {
+		return nil, err
+	}
+	for _, elm := range loadBlocksDataResp {
+		loadBlocks := workerspb.LoadBlocksData{
+			Date:            elm.Date.GoString(),
+			CountBlocks:     elm.TotalBlocks,
+			WorkersCount:    int32(elm.WorkerCount),
+			BlocksPerWorker: elm.BlocksPerWorker,
+			TotalPrice:      int64(elm.Payment),
+		}
+		loadBlocksData = append(loadBlocksData, &loadBlocks)
+	}
+
+	paidMonthlyData := []*workerspb.PaidMonthly{}
+	paidMonthlyDataResp, err := w.queries.PaidMonthlyData(ctx, int32(worker_id))
+	if err != nil {
+		return nil, err
+	}
+	for _, elm := range paidMonthlyDataResp {
+		paidMonthly := workerspb.PaidMonthly{
+			Date:      elm.Date.GoString(),
+			PaidPrice: int64(elm.PaidPrice),
+		}
+		paidMonthlyData = append(paidMonthlyData, &paidMonthly)
+	}
+	return &workerspb.MonthlyReportResp{
+		EndDayData:     endDayData,
+		LoadBlocksData: loadBlocksData,
+		PaidMonthly:    paidMonthlyData,
+	}, nil
+}
+
+func (w *WorkersREPO) AddPaidMonthly(ctx context.Context, req *workerspb.PaidWorkerMonthlyReq) (*workerspb.PaidWorkerMonthlyResp, error) {
+	err := w.queries.AddPaidMonthly(ctx, storage.AddPaidMonthlyParams{
+		WorkerID:  int32(req.WorkerId),
+		Date:      time.Now(),
+		PaidPrice: int32(req.PaidPrice),
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &workerspb.PaidWorkerMonthlyResp{
+		Status:  true,
+		Message: "Paid successfully",
+	}, nil
 }

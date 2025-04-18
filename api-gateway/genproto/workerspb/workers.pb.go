@@ -597,9 +597,10 @@ func (x *MonthlyReportReq) GetId() string {
 type EndDayData struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Date          string                 `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
-	CountBlocks   string                 `protobuf:"bytes,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
+	CountBlocks   int32                  `protobuf:"varint,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
 	WorkersCount  int32                  `protobuf:"varint,3,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
-	TotalPrice    int64                  `protobuf:"varint,4,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	WorkerShare   int32                  `protobuf:"varint,4,opt,name=worker_share,json=workerShare,proto3" json:"worker_share,omitempty"`
+	TotalPrice    int64                  `protobuf:"varint,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -641,16 +642,23 @@ func (x *EndDayData) GetDate() string {
 	return ""
 }
 
-func (x *EndDayData) GetCountBlocks() string {
+func (x *EndDayData) GetCountBlocks() int32 {
 	if x != nil {
 		return x.CountBlocks
 	}
-	return ""
+	return 0
 }
 
 func (x *EndDayData) GetWorkersCount() int32 {
 	if x != nil {
 		return x.WorkersCount
+	}
+	return 0
+}
+
+func (x *EndDayData) GetWorkerShare() int32 {
+	if x != nil {
+		return x.WorkerShare
 	}
 	return 0
 }
@@ -663,13 +671,14 @@ func (x *EndDayData) GetTotalPrice() int64 {
 }
 
 type LoadBlocksData struct {
-	state         protoimpl.MessageState `protogen:"open.v1"`
-	Date          string                 `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
-	CountBlocks   string                 `protobuf:"bytes,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
-	WorkersCount  int32                  `protobuf:"varint,3,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
-	TotalPrice    int64                  `protobuf:"varint,4,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
-	unknownFields protoimpl.UnknownFields
-	sizeCache     protoimpl.SizeCache
+	state           protoimpl.MessageState `protogen:"open.v1"`
+	Date            string                 `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
+	CountBlocks     int32                  `protobuf:"varint,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
+	WorkersCount    int32                  `protobuf:"varint,3,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
+	BlocksPerWorker int32                  `protobuf:"varint,4,opt,name=blocks_per_worker,json=blocksPerWorker,proto3" json:"blocks_per_worker,omitempty"`
+	TotalPrice      int64                  `protobuf:"varint,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	unknownFields   protoimpl.UnknownFields
+	sizeCache       protoimpl.SizeCache
 }
 
 func (x *LoadBlocksData) Reset() {
@@ -709,16 +718,23 @@ func (x *LoadBlocksData) GetDate() string {
 	return ""
 }
 
-func (x *LoadBlocksData) GetCountBlocks() string {
+func (x *LoadBlocksData) GetCountBlocks() int32 {
 	if x != nil {
 		return x.CountBlocks
 	}
-	return ""
+	return 0
 }
 
 func (x *LoadBlocksData) GetWorkersCount() int32 {
 	if x != nil {
 		return x.WorkersCount
+	}
+	return 0
+}
+
+func (x *LoadBlocksData) GetBlocksPerWorker() int32 {
+	if x != nil {
+		return x.BlocksPerWorker
 	}
 	return 0
 }
@@ -845,6 +861,111 @@ func (x *MonthlyReportResp) GetPaidMonthly() []*PaidMonthly {
 	return nil
 }
 
+// PaidWorkerMonthly
+type PaidWorkerMonthlyReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	PaidPrice     int64                  `protobuf:"varint,1,opt,name=paid_price,json=paidPrice,proto3" json:"paid_price,omitempty"`
+	WorkerId      int64                  `protobuf:"varint,2,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PaidWorkerMonthlyReq) Reset() {
+	*x = PaidWorkerMonthlyReq{}
+	mi := &file_protos_workers_proto_msgTypes[14]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PaidWorkerMonthlyReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PaidWorkerMonthlyReq) ProtoMessage() {}
+
+func (x *PaidWorkerMonthlyReq) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_workers_proto_msgTypes[14]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PaidWorkerMonthlyReq.ProtoReflect.Descriptor instead.
+func (*PaidWorkerMonthlyReq) Descriptor() ([]byte, []int) {
+	return file_protos_workers_proto_rawDescGZIP(), []int{14}
+}
+
+func (x *PaidWorkerMonthlyReq) GetPaidPrice() int64 {
+	if x != nil {
+		return x.PaidPrice
+	}
+	return 0
+}
+
+func (x *PaidWorkerMonthlyReq) GetWorkerId() int64 {
+	if x != nil {
+		return x.WorkerId
+	}
+	return 0
+}
+
+type PaidWorkerMonthlyResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *PaidWorkerMonthlyResp) Reset() {
+	*x = PaidWorkerMonthlyResp{}
+	mi := &file_protos_workers_proto_msgTypes[15]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *PaidWorkerMonthlyResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*PaidWorkerMonthlyResp) ProtoMessage() {}
+
+func (x *PaidWorkerMonthlyResp) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_workers_proto_msgTypes[15]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use PaidWorkerMonthlyResp.ProtoReflect.Descriptor instead.
+func (*PaidWorkerMonthlyResp) Descriptor() ([]byte, []int) {
+	return file_protos_workers_proto_rawDescGZIP(), []int{15}
+}
+
+func (x *PaidWorkerMonthlyResp) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
+func (x *PaidWorkerMonthlyResp) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
 var File_protos_workers_proto protoreflect.FileDescriptor
 
 const file_protos_workers_proto_rawDesc = "" +
@@ -889,19 +1010,21 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\"\"\n" +
 	"\x10MonthlyReportReq\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\x89\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"\xac\x01\n" +
 	"\n" +
 	"EndDayData\x12\x12\n" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12!\n" +
-	"\fcount_blocks\x18\x02 \x01(\tR\vcountBlocks\x12#\n" +
-	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12\x1f\n" +
-	"\vtotal_price\x18\x04 \x01(\x03R\n" +
-	"totalPrice\"\x8d\x01\n" +
+	"\fcount_blocks\x18\x02 \x01(\x05R\vcountBlocks\x12#\n" +
+	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12!\n" +
+	"\fworker_share\x18\x04 \x01(\x05R\vworkerShare\x12\x1f\n" +
+	"\vtotal_price\x18\x05 \x01(\x03R\n" +
+	"totalPrice\"\xb9\x01\n" +
 	"\x0eLoadBlocksData\x12\x12\n" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12!\n" +
-	"\fcount_blocks\x18\x02 \x01(\tR\vcountBlocks\x12#\n" +
-	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12\x1f\n" +
-	"\vtotal_price\x18\x04 \x01(\x03R\n" +
+	"\fcount_blocks\x18\x02 \x01(\x05R\vcountBlocks\x12#\n" +
+	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12*\n" +
+	"\x11blocks_per_worker\x18\x04 \x01(\x05R\x0fblocksPerWorker\x12\x1f\n" +
+	"\vtotal_price\x18\x05 \x01(\x03R\n" +
 	"totalPrice\"@\n" +
 	"\vPaidMonthly\x12\x12\n" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12\x1d\n" +
@@ -911,7 +1034,14 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\fend_day_data\x18\x01 \x03(\v2\v.EndDayDataR\n" +
 	"endDayData\x129\n" +
 	"\x10load_blocks_data\x18\x02 \x03(\v2\x0f.LoadBlocksDataR\x0eloadBlocksData\x12/\n" +
-	"\fpaid_monthly\x18\x03 \x03(\v2\f.PaidMonthlyR\vpaidMonthly2\xf8\x01\n" +
+	"\fpaid_monthly\x18\x03 \x03(\v2\f.PaidMonthlyR\vpaidMonthly\"R\n" +
+	"\x14PaidWorkerMonthlyReq\x12\x1d\n" +
+	"\n" +
+	"paid_price\x18\x01 \x01(\x03R\tpaidPrice\x12\x1b\n" +
+	"\tworker_id\x18\x02 \x01(\x03R\bworkerId\"I\n" +
+	"\x15PaidWorkerMonthlyResp\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage2\xb9\x02\n" +
 	"\x0eWorkersService\x12-\n" +
 	"\n" +
 	"AddWorkers\x12\x0e.AddWorkersReq\x1a\x0f.AddWorkersResp\x12-\n" +
@@ -921,7 +1051,8 @@ const file_protos_workers_proto_rawDesc = "" +
 	".EndDayReq\x1a\v.EndDayResp\x12-\n" +
 	"\n" +
 	"LoadBlocks\x12\x0e.LoadBlocksReq\x1a\x0f.LoadBlocksResp\x126\n" +
-	"\rMonthlyReport\x12\x11.MonthlyReportReq\x1a\x12.MonthlyReportRespB\x14Z\x12genproto/workerspbb\x06proto3"
+	"\rMonthlyReport\x12\x11.MonthlyReportReq\x1a\x12.MonthlyReportResp\x12?\n" +
+	"\x0eAddPaidMonthly\x12\x15.PaidWorkerMonthlyReq\x1a\x16.PaidWorkerMonthlyRespB\x14Z\x12genproto/workerspbb\x06proto3"
 
 var (
 	file_protos_workers_proto_rawDescOnce sync.Once
@@ -935,22 +1066,24 @@ func file_protos_workers_proto_rawDescGZIP() []byte {
 	return file_protos_workers_proto_rawDescData
 }
 
-var file_protos_workers_proto_msgTypes = make([]protoimpl.MessageInfo, 14)
+var file_protos_workers_proto_msgTypes = make([]protoimpl.MessageInfo, 16)
 var file_protos_workers_proto_goTypes = []any{
-	(*AddWorkersReq)(nil),     // 0: AddWorkersReq
-	(*AddWorkersResp)(nil),    // 1: AddWorkersResp
-	(*Worker)(nil),            // 2: Worker
-	(*GetWorkersReq)(nil),     // 3: GetWorkersReq
-	(*GetWorkersResp)(nil),    // 4: GetWorkersResp
-	(*EndDayReq)(nil),         // 5: EndDayReq
-	(*EndDayResp)(nil),        // 6: EndDayResp
-	(*LoadBlocksReq)(nil),     // 7: LoadBlocksReq
-	(*LoadBlocksResp)(nil),    // 8: LoadBlocksResp
-	(*MonthlyReportReq)(nil),  // 9: MonthlyReportReq
-	(*EndDayData)(nil),        // 10: EndDayData
-	(*LoadBlocksData)(nil),    // 11: LoadBlocksData
-	(*PaidMonthly)(nil),       // 12: PaidMonthly
-	(*MonthlyReportResp)(nil), // 13: MonthlyReportResp
+	(*AddWorkersReq)(nil),         // 0: AddWorkersReq
+	(*AddWorkersResp)(nil),        // 1: AddWorkersResp
+	(*Worker)(nil),                // 2: Worker
+	(*GetWorkersReq)(nil),         // 3: GetWorkersReq
+	(*GetWorkersResp)(nil),        // 4: GetWorkersResp
+	(*EndDayReq)(nil),             // 5: EndDayReq
+	(*EndDayResp)(nil),            // 6: EndDayResp
+	(*LoadBlocksReq)(nil),         // 7: LoadBlocksReq
+	(*LoadBlocksResp)(nil),        // 8: LoadBlocksResp
+	(*MonthlyReportReq)(nil),      // 9: MonthlyReportReq
+	(*EndDayData)(nil),            // 10: EndDayData
+	(*LoadBlocksData)(nil),        // 11: LoadBlocksData
+	(*PaidMonthly)(nil),           // 12: PaidMonthly
+	(*MonthlyReportResp)(nil),     // 13: MonthlyReportResp
+	(*PaidWorkerMonthlyReq)(nil),  // 14: PaidWorkerMonthlyReq
+	(*PaidWorkerMonthlyResp)(nil), // 15: PaidWorkerMonthlyResp
 }
 var file_protos_workers_proto_depIdxs = []int32{
 	2,  // 0: GetWorkersResp.workers:type_name -> Worker
@@ -962,13 +1095,15 @@ var file_protos_workers_proto_depIdxs = []int32{
 	5,  // 6: WorkersService.EndDay:input_type -> EndDayReq
 	7,  // 7: WorkersService.LoadBlocks:input_type -> LoadBlocksReq
 	9,  // 8: WorkersService.MonthlyReport:input_type -> MonthlyReportReq
-	1,  // 9: WorkersService.AddWorkers:output_type -> AddWorkersResp
-	4,  // 10: WorkersService.GetWorkers:output_type -> GetWorkersResp
-	6,  // 11: WorkersService.EndDay:output_type -> EndDayResp
-	8,  // 12: WorkersService.LoadBlocks:output_type -> LoadBlocksResp
-	13, // 13: WorkersService.MonthlyReport:output_type -> MonthlyReportResp
-	9,  // [9:14] is the sub-list for method output_type
-	4,  // [4:9] is the sub-list for method input_type
+	14, // 9: WorkersService.AddPaidMonthly:input_type -> PaidWorkerMonthlyReq
+	1,  // 10: WorkersService.AddWorkers:output_type -> AddWorkersResp
+	4,  // 11: WorkersService.GetWorkers:output_type -> GetWorkersResp
+	6,  // 12: WorkersService.EndDay:output_type -> EndDayResp
+	8,  // 13: WorkersService.LoadBlocks:output_type -> LoadBlocksResp
+	13, // 14: WorkersService.MonthlyReport:output_type -> MonthlyReportResp
+	15, // 15: WorkersService.AddPaidMonthly:output_type -> PaidWorkerMonthlyResp
+	10, // [10:16] is the sub-list for method output_type
+	4,  // [4:10] is the sub-list for method input_type
 	4,  // [4:4] is the sub-list for extension type_name
 	4,  // [4:4] is the sub-list for extension extendee
 	0,  // [0:4] is the sub-list for field type_name
@@ -985,7 +1120,7 @@ func file_protos_workers_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_protos_workers_proto_rawDesc), len(file_protos_workers_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   14,
+			NumMessages:   16,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

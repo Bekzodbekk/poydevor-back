@@ -7,8 +7,27 @@ package storage
 
 import (
 	"context"
+	"database/sql"
 	"time"
 )
+
+const addPaidMonthly = `-- name: AddPaidMonthly :exec
+INSERT INTO paid_monthly
+    (worker_id, date, paid_price)
+VALUES 
+    ($1, $2, $3)
+`
+
+type AddPaidMonthlyParams struct {
+	WorkerID  int32
+	Date      time.Time
+	PaidPrice int32
+}
+
+func (q *Queries) AddPaidMonthly(ctx context.Context, arg AddPaidMonthlyParams) error {
+	_, err := q.db.ExecContext(ctx, addPaidMonthly, arg.WorkerID, arg.Date, arg.PaidPrice)
+	return err
+}
 
 const addWorker = `-- name: AddWorker :exec
 INSERT INTO workers
@@ -46,6 +65,88 @@ func (q *Queries) EndDay(ctx context.Context, arg EndDayParams) (int32, error) {
 	var id int32
 	err := row.Scan(&id)
 	return id, err
+}
+
+const endDayDataMonthlyReport = `-- name: EndDayDataMonthlyReport :many
+WITH worker_blocks AS (
+    -- Get all production IDs where the worker participated
+    SELECT 
+        dpw.daily_production_id,
+        dp.date,
+        dp.count_blocks
+    FROM 
+        daily_production_workers dpw
+    JOIN 
+        daily_production dp ON dpw.daily_production_id = dp.id
+    WHERE 
+        dpw.worker_id = $1 
+        AND dpw.deleted_at = 0
+        AND dp.deleted_at = 0
+),
+production_stats AS (
+    -- Count workers for each production
+    SELECT 
+        dpw.daily_production_id,
+        COUNT(dpw.worker_id) AS worker_count
+    FROM 
+        daily_production_workers dpw
+    WHERE 
+        dpw.deleted_at = 0
+    GROUP BY 
+        dpw.daily_production_id
+)
+SELECT 
+    wb.daily_production_id,
+    wb.date,
+    wb.count_blocks AS total_blocks,
+    ps.worker_count,
+    (wb.count_blocks / ps.worker_count) AS worker_share,
+    (wb.count_blocks / ps.worker_count) * 600 AS worker_payment
+FROM 
+    worker_blocks wb
+JOIN 
+    production_stats ps ON wb.daily_production_id = ps.daily_production_id
+ORDER BY 
+    wb.date
+`
+
+type EndDayDataMonthlyReportRow struct {
+	DailyProductionID int32
+	Date              time.Time
+	TotalBlocks       int32
+	WorkerCount       int64
+	WorkerShare       int32
+	WorkerPayment     int32
+}
+
+func (q *Queries) EndDayDataMonthlyReport(ctx context.Context, workerID int32) ([]EndDayDataMonthlyReportRow, error) {
+	rows, err := q.db.QueryContext(ctx, endDayDataMonthlyReport, workerID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []EndDayDataMonthlyReportRow
+	for rows.Next() {
+		var i EndDayDataMonthlyReportRow
+		if err := rows.Scan(
+			&i.DailyProductionID,
+			&i.Date,
+			&i.TotalBlocks,
+			&i.WorkerCount,
+			&i.WorkerShare,
+			&i.WorkerPayment,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const endDayWorkers = `-- name: EndDayWorkers :exec
@@ -120,6 +221,141 @@ type LoadBlockWorkersParams struct {
 func (q *Queries) LoadBlockWorkers(ctx context.Context, arg LoadBlockWorkersParams) error {
 	_, err := q.db.ExecContext(ctx, loadBlockWorkers, arg.SendBlockID, arg.WorkerID)
 	return err
+}
+
+const loadBlocksDataMonthlyReport = `-- name: LoadBlocksDataMonthlyReport :many
+WITH worker_payments AS (
+    SELECT
+        lp.worker_id,
+        sb.date,
+        sb.count_blocks,
+        sb.address,
+        sb.load_price,
+        COUNT(DISTINCT lp2.worker_id) AS worker_count,
+        sb.count_blocks / COUNT(DISTINCT lp2.worker_id) AS blocks_per_worker,
+        (sb.count_blocks / COUNT(DISTINCT lp2.worker_id)) * sb.load_price AS payment
+    FROM 
+        load_production lp
+    JOIN 
+        send_blocks sb ON lp.send_block_id = sb.id
+    JOIN 
+        load_production lp2 ON lp.send_block_id = lp2.send_block_id
+    WHERE 
+        lp.worker_id = $1 -- Replace $1 with the worker_id you want to search for
+    GROUP BY 
+        lp.worker_id, sb.id, sb.date, sb.count_blocks, sb.address, sb.load_price
+)
+SELECT
+    worker_id,
+    date,
+    address,
+    count_blocks AS total_blocks,
+    worker_count,
+    blocks_per_worker,
+    load_price AS price_per_block,
+    payment,
+    SUM(payment) OVER() AS total_payment
+FROM
+    worker_payments
+ORDER BY
+    date
+`
+
+type LoadBlocksDataMonthlyReportRow struct {
+	WorkerID        int32
+	Date            time.Time
+	Address         string
+	TotalBlocks     int32
+	WorkerCount     int64
+	BlocksPerWorker int32
+	PricePerBlock   int32
+	Payment         int32
+	TotalPayment    int64
+}
+
+func (q *Queries) LoadBlocksDataMonthlyReport(ctx context.Context, workerID int32) ([]LoadBlocksDataMonthlyReportRow, error) {
+	rows, err := q.db.QueryContext(ctx, loadBlocksDataMonthlyReport, workerID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []LoadBlocksDataMonthlyReportRow
+	for rows.Next() {
+		var i LoadBlocksDataMonthlyReportRow
+		if err := rows.Scan(
+			&i.WorkerID,
+			&i.Date,
+			&i.Address,
+			&i.TotalBlocks,
+			&i.WorkerCount,
+			&i.BlocksPerWorker,
+			&i.PricePerBlock,
+			&i.Payment,
+			&i.TotalPayment,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
+const paidMonthlyData = `-- name: PaidMonthlyData :many
+SELECT 
+    worker_id,
+    date,
+    paid_price,
+    created_at
+FROM 
+    paid_monthly
+WHERE 
+    worker_id = $1 -- Replace $1 with the worker_id you want to search for
+    AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)
+    AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE)
+    AND deleted_at = 0
+ORDER BY 
+    date
+`
+
+type PaidMonthlyDataRow struct {
+	WorkerID  int32
+	Date      time.Time
+	PaidPrice int32
+	CreatedAt sql.NullTime
+}
+
+func (q *Queries) PaidMonthlyData(ctx context.Context, workerID int32) ([]PaidMonthlyDataRow, error) {
+	rows, err := q.db.QueryContext(ctx, paidMonthlyData, workerID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []PaidMonthlyDataRow
+	for rows.Next() {
+		var i PaidMonthlyDataRow
+		if err := rows.Scan(
+			&i.WorkerID,
+			&i.Date,
+			&i.PaidPrice,
+			&i.CreatedAt,
+		); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
 }
 
 const sendBlocks = `-- name: SendBlocks :one

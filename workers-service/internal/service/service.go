@@ -36,3 +36,7 @@ func (s *Service) LoadBlocks(ctx context.Context, req *workerspb.LoadBlocksReq) 
 func (s *Service) MonthlyReport(ctx context.Context, req *workerspb.MonthlyReportReq) (*workerspb.MonthlyReportResp, error) {
 	return s.repo.MonthlyReport(ctx, req)
 }
+
+func (s *Service) AddPaidMonthly(ctx context.Context, req *workerspb.PaidWorkerMonthlyReq) (*workerspb.PaidWorkerMonthlyResp, error) {
+	return s.repo.AddPaidMonthly(ctx, req)
+}

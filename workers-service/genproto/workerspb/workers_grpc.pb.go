@@ -19,11 +19,12 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WorkersService_AddWorkers_FullMethodName    = "/WorkersService/AddWorkers"
-	WorkersService_GetWorkers_FullMethodName    = "/WorkersService/GetWorkers"
-	WorkersService_EndDay_FullMethodName        = "/WorkersService/EndDay"
-	WorkersService_LoadBlocks_FullMethodName    = "/WorkersService/LoadBlocks"
-	WorkersService_MonthlyReport_FullMethodName = "/WorkersService/MonthlyReport"
+	WorkersService_AddWorkers_FullMethodName     = "/WorkersService/AddWorkers"
+	WorkersService_GetWorkers_FullMethodName     = "/WorkersService/GetWorkers"
+	WorkersService_EndDay_FullMethodName         = "/WorkersService/EndDay"
+	WorkersService_LoadBlocks_FullMethodName     = "/WorkersService/LoadBlocks"
+	WorkersService_MonthlyReport_FullMethodName  = "/WorkersService/MonthlyReport"
+	WorkersService_AddPaidMonthly_FullMethodName = "/WorkersService/AddPaidMonthly"
 )
 
 // WorkersServiceClient is the client API for WorkersService service.
@@ -35,6 +36,7 @@ type WorkersServiceClient interface {
 	EndDay(ctx context.Context, in *EndDayReq, opts ...grpc.CallOption) (*EndDayResp, error)
 	LoadBlocks(ctx context.Context, in *LoadBlocksReq, opts ...grpc.CallOption) (*LoadBlocksResp, error)
 	MonthlyReport(ctx context.Context, in *MonthlyReportReq, opts ...grpc.CallOption) (*MonthlyReportResp, error)
+	AddPaidMonthly(ctx context.Context, in *PaidWorkerMonthlyReq, opts ...grpc.CallOption) (*PaidWorkerMonthlyResp, error)
 }
 
 type workersServiceClient struct {
@@ -95,6 +97,16 @@ func (c *workersServiceClient) MonthlyReport(ctx context.Context, in *MonthlyRep
 	return out, nil
 }
 
+func (c *workersServiceClient) AddPaidMonthly(ctx context.Context, in *PaidWorkerMonthlyReq, opts ...grpc.CallOption) (*PaidWorkerMonthlyResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(PaidWorkerMonthlyResp)
+	err := c.cc.Invoke(ctx, WorkersService_AddPaidMonthly_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkersServiceServer is the server API for WorkersService service.
 // All implementations must embed UnimplementedWorkersServiceServer
 // for forward compatibility.
@@ -104,6 +116,7 @@ type WorkersServiceServer interface {
 	EndDay(context.Context, *EndDayReq) (*EndDayResp, error)
 	LoadBlocks(context.Context, *LoadBlocksReq) (*LoadBlocksResp, error)
 	MonthlyReport(context.Context, *MonthlyReportReq) (*MonthlyReportResp, error)
+	AddPaidMonthly(context.Context, *PaidWorkerMonthlyReq) (*PaidWorkerMonthlyResp, error)
 	mustEmbedUnimplementedWorkersServiceServer()
 }
 
@@ -128,6 +141,9 @@ func (UnimplementedWorkersServiceServer) LoadBlocks(context.Context, *LoadBlocks
 }
 func (UnimplementedWorkersServiceServer) MonthlyReport(context.Context, *MonthlyReportReq) (*MonthlyReportResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method MonthlyReport not implemented")
+}
+func (UnimplementedWorkersServiceServer) AddPaidMonthly(context.Context, *PaidWorkerMonthlyReq) (*PaidWorkerMonthlyResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method AddPaidMonthly not implemented")
 }
 func (UnimplementedWorkersServiceServer) mustEmbedUnimplementedWorkersServiceServer() {}
 func (UnimplementedWorkersServiceServer) testEmbeddedByValue()                        {}
@@ -240,6 +256,24 @@ func _WorkersService_MonthlyReport_Handler(srv interface{}, ctx context.Context,
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkersService_AddPaidMonthly_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(PaidWorkerMonthlyReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkersServiceServer).AddPaidMonthly(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkersService_AddPaidMonthly_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkersServiceServer).AddPaidMonthly(ctx, req.(*PaidWorkerMonthlyReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkersService_ServiceDesc is the grpc.ServiceDesc for WorkersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -266,6 +300,10 @@ var WorkersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "MonthlyReport",
 			Handler:    _WorkersService_MonthlyReport_Handler,
+		},
+		{
+			MethodName: "AddPaidMonthly",
+			Handler:    _WorkersService_AddPaidMonthly_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

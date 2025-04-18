@@ -1,9 +1,9 @@
 service:
-  host: localhost
+  host: workers_service
   port: 8081
 
 postgres:
-  host: localhost
+  host: postgres
   port: 5432
   user: postgres
   password: 1

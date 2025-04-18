@@ -40,6 +40,7 @@ type PaidMonthly struct {
 	ID        int32
 	Date      time.Time
 	PaidPrice int32
+	WorkerID  int32
 	CreatedAt sql.NullTime
 	UpdatedAt sql.NullTime
 	DeletedAt sql.NullInt32
