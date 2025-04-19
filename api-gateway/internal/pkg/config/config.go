@@ -16,8 +16,14 @@ type Services struct {
 	ApiGateway     ApiGateway
 }
 
+type TLS struct {
+	KeyFile  string
+	CertFile string
+}
+
 type Config struct {
 	Services Services
+	TLS      TLS
 }
 
 func LOAD(path string) (*Config, error) {
@@ -37,6 +43,10 @@ func LOAD(path string) (*Config, error) {
 				Host: viper.GetString("services.api-gateway.host"),
 				Port: viper.GetInt("services.api-gateway.port"),
 			},
+		},
+		TLS: TLS{
+			KeyFile:  viper.GetString("tls.key_file"),
+			CertFile: viper.GetString("tls.cert_file"),
 		},
 	}
 

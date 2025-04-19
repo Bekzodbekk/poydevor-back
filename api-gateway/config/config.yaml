@@ -5,4 +5,8 @@ services:
 
   api-gateway:
     host: api_gateway
-    port: 8080
+    port: 9000
+
+tls:
+  cert_file: ./tls/cert.pem
+  key_file: ./tls/key.pem

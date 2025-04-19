@@ -5,8 +5,13 @@ import (
 	"api-gateway/internal/pkg/config"
 	"api-gateway/internal/pkg/service"
 	workersservice "api-gateway/internal/pkg/workers-service"
+	"context"
 	"fmt"
 	"log"
+	"os"
+	"os/signal"
+	"syscall"
+	"time"
 )
 
 func main() {
@@ -25,7 +30,22 @@ func main() {
 	target := fmt.Sprintf("%s:%d", cfg.Services.ApiGateway.Host, cfg.Services.ApiGateway.Port)
 	fmt.Println(target)
 	log.Printf("Api Gateway running on :%d port", cfg.Services.ApiGateway.Port)
-	if err := r.Run(target); err != nil {
-		log.Fatal(err)
+
+	sigChan := make(chan os.Signal, 1)
+	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
+	go func() {
+
+		if err := r.ListenAndServeTLS(cfg.TLS.CertFile, cfg.TLS.KeyFile); err != nil {
+			log.Fatal(err)
+		}
+	}()
+	signalReceived := <-sigChan
+	log.Print("Received signal", signalReceived)
+	shutdownCtx, shutdownRelease := context.WithTimeout(context.Background(), 10*time.Second)
+	defer shutdownRelease()
+
+	if err := r.Shutdown(shutdownCtx); err != nil {
+		log.Fatal("Server shutdown error: ", err)
 	}
+	log.Print("Graceful shutdown complete.")
 }

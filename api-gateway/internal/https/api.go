@@ -4,11 +4,13 @@ import (
 	"api-gateway/internal/https/handlers"
 	corsmiddleware "api-gateway/internal/https/middleware/corsMiddleware"
 	"api-gateway/internal/pkg/service"
+	"crypto/tls"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func NewGin(service *service.ServiceRepositoryClient) *gin.Engine {
+func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 	r := gin.Default()
 
 	newHandlers := handlers.NewHandlers(service)
@@ -21,5 +23,15 @@ func NewGin(service *service.ServiceRepositoryClient) *gin.Engine {
 	r.GET("/v1/workers/all-workers", newHandlers.AllWorkers)
 	r.GET("/v1/workers/monthly-report/:worker_id", newHandlers.MonthlyReport)
 
-	return r
+	tlsConfig := &tls.Config{
+		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
+	}
+
+	srv := &http.Server{
+		Addr:      ":9000",
+		Handler:   r,
+		TLSConfig: tlsConfig,
+	}
+
+	return srv
 }
