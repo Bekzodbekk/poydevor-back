@@ -39,7 +39,7 @@ type LoadProduction struct {
 type PaidMonthly struct {
 	ID        int32
 	Date      time.Time
-	PaidPrice int32
+	PaidPrice float64
 	WorkerID  int32
 	CreatedAt sql.NullTime
 	UpdatedAt sql.NullTime

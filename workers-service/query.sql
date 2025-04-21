@@ -53,11 +53,11 @@ WITH worker_blocks AS (
     JOIN 
         daily_production dp ON dpw.daily_production_id = dp.id
     WHERE 
-        dpw.worker_id = CAST($1 AS INTEGER)  -- Convert string to integer
+        dpw.worker_id = CAST($1 AS INTEGER)
         AND dpw.deleted_at = 0
         AND dp.deleted_at = 0
-        AND EXTRACT(YEAR FROM dp.date) = CAST($2 AS INTEGER)  -- Convert string to integer
-        AND EXTRACT(MONTH FROM dp.date) = CAST($3 AS INTEGER)  -- Convert string to integer
+        AND EXTRACT(YEAR FROM dp.date) = CAST($2 AS INTEGER)
+        AND EXTRACT(MONTH FROM dp.date) = CAST($3 AS INTEGER)
 ),
 production_stats AS (
     -- Count workers for each production
@@ -76,8 +76,8 @@ SELECT
     wb.date,
     wb.count_blocks AS total_blocks,
     ps.worker_count,
-    (wb.count_blocks / ps.worker_count) AS worker_share,
-    (wb.count_blocks / ps.worker_count) * 600 AS worker_payment
+    ROUND(wb.count_blocks::NUMERIC / ps.worker_count, 1) AS worker_share,
+    ROUND((wb.count_blocks::NUMERIC / ps.worker_count) * 600, 1) AS worker_payment
 FROM 
     worker_blocks wb
 JOIN 
@@ -85,18 +85,17 @@ JOIN
 ORDER BY 
     wb.date;
 
-
 -- name: LoadBlocksDataMonthlyReport :many
 WITH worker_payments AS (
     SELECT
         lp.worker_id,
         sb.date,
-        sb.count_blocks,
+        sb.count_blocks AS total_blocks,
         sb.address,
-        sb.load_price,
         COUNT(DISTINCT lp2.worker_id) AS worker_count,
-        sb.count_blocks / COUNT(DISTINCT lp2.worker_id) AS blocks_per_worker,
-        (sb.count_blocks / COUNT(DISTINCT lp2.worker_id)) * sb.load_price AS payment
+        ROUND(sb.count_blocks::NUMERIC / COUNT(DISTINCT lp2.worker_id), 1) AS blocks_per_worker,
+        sb.load_price AS price_per_block,
+        ROUND((sb.count_blocks::NUMERIC / COUNT(DISTINCT lp2.worker_id)) * sb.load_price, 1) AS payment
     FROM 
         load_production lp
     JOIN 
@@ -110,21 +109,18 @@ WITH worker_payments AS (
     GROUP BY 
         lp.worker_id, sb.id, sb.date, sb.count_blocks, sb.address, sb.load_price
 )
-SELECT
+SELECT 
     worker_id,
     date,
     address,
-    count_blocks AS total_blocks,
+    total_blocks,
     worker_count,
-    blocks_per_worker,
-    load_price AS price_per_block,
-    payment,
-    SUM(payment) OVER() AS total_payment
-FROM
-    worker_payments
-ORDER BY
-    date;
-
+    ROUND(blocks_per_worker, 1) AS blocks_per_worker,  -- Soddalashtirilgan
+    price_per_block,
+    ROUND(payment, 1) AS payment,  -- Soddalashtirilgan
+    ROUND(SUM(payment) OVER (), 1) AS total_payment  -- To'g'ri hisoblash
+FROM 
+    worker_payments;
 
 
 -- name: PaidMonthlyData :many
@@ -148,3 +144,5 @@ INSERT INTO paid_monthly
     (worker_id, date, paid_price)
 VALUES 
     ($1, $2, $3);
+
+

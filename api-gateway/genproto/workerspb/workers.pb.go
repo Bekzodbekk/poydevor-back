@@ -615,8 +615,8 @@ type EndDayData struct {
 	Date          string                 `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
 	CountBlocks   int32                  `protobuf:"varint,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
 	WorkersCount  int32                  `protobuf:"varint,3,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
-	WorkerShare   int32                  `protobuf:"varint,4,opt,name=worker_share,json=workerShare,proto3" json:"worker_share,omitempty"`
-	TotalPrice    int64                  `protobuf:"varint,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	WorkerShare   string                 `protobuf:"bytes,4,opt,name=worker_share,json=workerShare,proto3" json:"worker_share,omitempty"`
+	TotalPrice    string                 `protobuf:"bytes,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -672,18 +672,18 @@ func (x *EndDayData) GetWorkersCount() int32 {
 	return 0
 }
 
-func (x *EndDayData) GetWorkerShare() int32 {
+func (x *EndDayData) GetWorkerShare() string {
 	if x != nil {
 		return x.WorkerShare
 	}
-	return 0
+	return ""
 }
 
-func (x *EndDayData) GetTotalPrice() int64 {
+func (x *EndDayData) GetTotalPrice() string {
 	if x != nil {
 		return x.TotalPrice
 	}
-	return 0
+	return ""
 }
 
 type LoadBlocksData struct {
@@ -691,8 +691,8 @@ type LoadBlocksData struct {
 	Date            string                 `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
 	CountBlocks     int32                  `protobuf:"varint,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
 	WorkersCount    int32                  `protobuf:"varint,3,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
-	BlocksPerWorker int32                  `protobuf:"varint,4,opt,name=blocks_per_worker,json=blocksPerWorker,proto3" json:"blocks_per_worker,omitempty"`
-	TotalPrice      int64                  `protobuf:"varint,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	BlocksPerWorker string                 `protobuf:"bytes,4,opt,name=blocks_per_worker,json=blocksPerWorker,proto3" json:"blocks_per_worker,omitempty"`
+	TotalPrice      string                 `protobuf:"bytes,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -748,18 +748,18 @@ func (x *LoadBlocksData) GetWorkersCount() int32 {
 	return 0
 }
 
-func (x *LoadBlocksData) GetBlocksPerWorker() int32 {
+func (x *LoadBlocksData) GetBlocksPerWorker() string {
 	if x != nil {
 		return x.BlocksPerWorker
 	}
-	return 0
+	return ""
 }
 
-func (x *LoadBlocksData) GetTotalPrice() int64 {
+func (x *LoadBlocksData) GetTotalPrice() string {
 	if x != nil {
 		return x.TotalPrice
 	}
-	return 0
+	return ""
 }
 
 type PaidMonthly struct {
@@ -880,7 +880,7 @@ func (x *MonthlyReportResp) GetPaidMonthly() []*PaidMonthly {
 // PaidWorkerMonthly
 type PaidWorkerMonthlyReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	PaidPrice     int64                  `protobuf:"varint,1,opt,name=paid_price,json=paidPrice,proto3" json:"paid_price,omitempty"`
+	PaidPrice     float32                `protobuf:"fixed32,1,opt,name=paid_price,json=paidPrice,proto3" json:"paid_price,omitempty"`
 	WorkerId      int64                  `protobuf:"varint,2,opt,name=worker_id,json=workerId,proto3" json:"worker_id,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
@@ -916,7 +916,7 @@ func (*PaidWorkerMonthlyReq) Descriptor() ([]byte, []int) {
 	return file_protos_workers_proto_rawDescGZIP(), []int{14}
 }
 
-func (x *PaidWorkerMonthlyReq) GetPaidPrice() int64 {
+func (x *PaidWorkerMonthlyReq) GetPaidPrice() float32 {
 	if x != nil {
 		return x.PaidPrice
 	}
@@ -1034,15 +1034,15 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12!\n" +
 	"\fcount_blocks\x18\x02 \x01(\x05R\vcountBlocks\x12#\n" +
 	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12!\n" +
-	"\fworker_share\x18\x04 \x01(\x05R\vworkerShare\x12\x1f\n" +
-	"\vtotal_price\x18\x05 \x01(\x03R\n" +
+	"\fworker_share\x18\x04 \x01(\tR\vworkerShare\x12\x1f\n" +
+	"\vtotal_price\x18\x05 \x01(\tR\n" +
 	"totalPrice\"\xb9\x01\n" +
 	"\x0eLoadBlocksData\x12\x12\n" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12!\n" +
 	"\fcount_blocks\x18\x02 \x01(\x05R\vcountBlocks\x12#\n" +
 	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12*\n" +
-	"\x11blocks_per_worker\x18\x04 \x01(\x05R\x0fblocksPerWorker\x12\x1f\n" +
-	"\vtotal_price\x18\x05 \x01(\x03R\n" +
+	"\x11blocks_per_worker\x18\x04 \x01(\tR\x0fblocksPerWorker\x12\x1f\n" +
+	"\vtotal_price\x18\x05 \x01(\tR\n" +
 	"totalPrice\"@\n" +
 	"\vPaidMonthly\x12\x12\n" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12\x1d\n" +
@@ -1055,7 +1055,7 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\fpaid_monthly\x18\x03 \x03(\v2\f.PaidMonthlyR\vpaidMonthly\"R\n" +
 	"\x14PaidWorkerMonthlyReq\x12\x1d\n" +
 	"\n" +
-	"paid_price\x18\x01 \x01(\x03R\tpaidPrice\x12\x1b\n" +
+	"paid_price\x18\x01 \x01(\x02R\tpaidPrice\x12\x1b\n" +
 	"\tworker_id\x18\x02 \x01(\x03R\bworkerId\"I\n" +
 	"\x15PaidWorkerMonthlyResp\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +

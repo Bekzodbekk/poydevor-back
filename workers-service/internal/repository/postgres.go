@@ -191,8 +191,8 @@ func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyR
 			Date:         elm.Date.GoString(),
 			CountBlocks:  elm.TotalBlocks,
 			WorkersCount: int32(elm.WorkerCount),
-			WorkerShare:  int32(elm.WorkerShare),
-			TotalPrice:   int64(elm.WorkerPayment),
+			WorkerShare:  elm.WorkerShare,
+			TotalPrice:   elm.WorkerPayment,
 		}
 		endDayData = append(endDayData, &endDay)
 	}
@@ -212,7 +212,7 @@ func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyR
 			CountBlocks:     elm.TotalBlocks,
 			WorkersCount:    int32(elm.WorkerCount),
 			BlocksPerWorker: elm.BlocksPerWorker,
-			TotalPrice:      int64(elm.Payment),
+			TotalPrice:      elm.Payment,
 		}
 		loadBlocksData = append(loadBlocksData, &loadBlocks)
 	}
@@ -244,7 +244,7 @@ func (w *WorkersREPO) AddPaidMonthly(ctx context.Context, req *workerspb.PaidWor
 	err := w.queries.AddPaidMonthly(ctx, storage.AddPaidMonthlyParams{
 		WorkerID:  int32(req.WorkerId),
 		Date:      time.Now(),
-		PaidPrice: int32(req.PaidPrice),
+		PaidPrice: float64(req.PaidPrice),
 	})
 	if err != nil {
 		return nil, err
