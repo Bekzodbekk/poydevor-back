@@ -553,6 +553,8 @@ func (x *LoadBlocksResp) GetMessage() string {
 type MonthlyReportReq struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
 	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Month         string                 `protobuf:"bytes,2,opt,name=month,proto3" json:"month,omitempty"`
+	Year          string                 `protobuf:"bytes,3,opt,name=year,proto3" json:"year,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -590,6 +592,20 @@ func (*MonthlyReportReq) Descriptor() ([]byte, []int) {
 func (x *MonthlyReportReq) GetId() string {
 	if x != nil {
 		return x.Id
+	}
+	return ""
+}
+
+func (x *MonthlyReportReq) GetMonth() string {
+	if x != nil {
+		return x.Month
+	}
+	return ""
+}
+
+func (x *MonthlyReportReq) GetYear() string {
+	if x != nil {
+		return x.Year
 	}
 	return ""
 }
@@ -1008,9 +1024,11 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\aworkers\x18\x06 \x03(\x05R\aworkers\"B\n" +
 	"\x0eLoadBlocksResp\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage\"\"\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"L\n" +
 	"\x10MonthlyReportReq\x12\x0e\n" +
-	"\x02id\x18\x01 \x01(\tR\x02id\"\xac\x01\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
+	"\x05month\x18\x02 \x01(\tR\x05month\x12\x12\n" +
+	"\x04year\x18\x03 \x01(\tR\x04year\"\xac\x01\n" +
 	"\n" +
 	"EndDayData\x12\x12\n" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12!\n" +

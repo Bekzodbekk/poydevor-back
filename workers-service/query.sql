@@ -53,9 +53,11 @@ WITH worker_blocks AS (
     JOIN 
         daily_production dp ON dpw.daily_production_id = dp.id
     WHERE 
-        dpw.worker_id = $1 
+        dpw.worker_id = CAST($1 AS INTEGER)  -- Convert string to integer
         AND dpw.deleted_at = 0
         AND dp.deleted_at = 0
+        AND EXTRACT(YEAR FROM dp.date) = CAST($2 AS INTEGER)  -- Convert string to integer
+        AND EXTRACT(MONTH FROM dp.date) = CAST($3 AS INTEGER)  -- Convert string to integer
 ),
 production_stats AS (
     -- Count workers for each production
@@ -102,7 +104,9 @@ WITH worker_payments AS (
     JOIN 
         load_production lp2 ON lp.send_block_id = lp2.send_block_id
     WHERE 
-        lp.worker_id = $1 -- Replace $1 with the worker_id you want to search for
+        lp.worker_id = CAST($1 AS INTEGER)
+        AND EXTRACT(YEAR FROM sb.date) = CAST($2 AS INTEGER)
+        AND EXTRACT(MONTH FROM sb.date) = CAST($3 AS INTEGER)
     GROUP BY 
         lp.worker_id, sb.id, sb.date, sb.count_blocks, sb.address, sb.load_price
 )
@@ -132,9 +136,9 @@ SELECT
 FROM 
     paid_monthly
 WHERE 
-    worker_id = $1 -- Replace $1 with the worker_id you want to search for
-    AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)
-    AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE)
+    worker_id = CAST($1 AS INTEGER)
+    AND EXTRACT(YEAR FROM date) = CAST($2 AS INTEGER)
+    AND EXTRACT(MONTH FROM date) = CAST($3 AS INTEGER)
     AND deleted_at = 0
 ORDER BY 
     date;

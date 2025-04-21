@@ -79,9 +79,11 @@ WITH worker_blocks AS (
     JOIN 
         daily_production dp ON dpw.daily_production_id = dp.id
     WHERE 
-        dpw.worker_id = $1 
+        dpw.worker_id = CAST($1 AS INTEGER)  -- Convert string to integer
         AND dpw.deleted_at = 0
         AND dp.deleted_at = 0
+        AND EXTRACT(YEAR FROM dp.date) = CAST($2 AS INTEGER)  -- Convert string to integer
+        AND EXTRACT(MONTH FROM dp.date) = CAST($3 AS INTEGER)  -- Convert string to integer
 ),
 production_stats AS (
     -- Count workers for each production
@@ -110,6 +112,12 @@ ORDER BY
     wb.date
 `
 
+type EndDayDataMonthlyReportParams struct {
+	Column1 int32
+	Column2 int32
+	Column3 int32
+}
+
 type EndDayDataMonthlyReportRow struct {
 	DailyProductionID int32
 	Date              time.Time
@@ -119,8 +127,8 @@ type EndDayDataMonthlyReportRow struct {
 	WorkerPayment     int32
 }
 
-func (q *Queries) EndDayDataMonthlyReport(ctx context.Context, workerID int32) ([]EndDayDataMonthlyReportRow, error) {
-	rows, err := q.db.QueryContext(ctx, endDayDataMonthlyReport, workerID)
+func (q *Queries) EndDayDataMonthlyReport(ctx context.Context, arg EndDayDataMonthlyReportParams) ([]EndDayDataMonthlyReportRow, error) {
+	rows, err := q.db.QueryContext(ctx, endDayDataMonthlyReport, arg.Column1, arg.Column2, arg.Column3)
 	if err != nil {
 		return nil, err
 	}
@@ -241,7 +249,9 @@ WITH worker_payments AS (
     JOIN 
         load_production lp2 ON lp.send_block_id = lp2.send_block_id
     WHERE 
-        lp.worker_id = $1 -- Replace $1 with the worker_id you want to search for
+        lp.worker_id = CAST($1 AS INTEGER)
+        AND EXTRACT(YEAR FROM sb.date) = CAST($2 AS INTEGER)
+        AND EXTRACT(MONTH FROM sb.date) = CAST($3 AS INTEGER)
     GROUP BY 
         lp.worker_id, sb.id, sb.date, sb.count_blocks, sb.address, sb.load_price
 )
@@ -261,6 +271,12 @@ ORDER BY
     date
 `
 
+type LoadBlocksDataMonthlyReportParams struct {
+	Column1 int32
+	Column2 int32
+	Column3 int32
+}
+
 type LoadBlocksDataMonthlyReportRow struct {
 	WorkerID        int32
 	Date            time.Time
@@ -273,8 +289,8 @@ type LoadBlocksDataMonthlyReportRow struct {
 	TotalPayment    int64
 }
 
-func (q *Queries) LoadBlocksDataMonthlyReport(ctx context.Context, workerID int32) ([]LoadBlocksDataMonthlyReportRow, error) {
-	rows, err := q.db.QueryContext(ctx, loadBlocksDataMonthlyReport, workerID)
+func (q *Queries) LoadBlocksDataMonthlyReport(ctx context.Context, arg LoadBlocksDataMonthlyReportParams) ([]LoadBlocksDataMonthlyReportRow, error) {
+	rows, err := q.db.QueryContext(ctx, loadBlocksDataMonthlyReport, arg.Column1, arg.Column2, arg.Column3)
 	if err != nil {
 		return nil, err
 	}
@@ -315,13 +331,19 @@ SELECT
 FROM 
     paid_monthly
 WHERE 
-    worker_id = $1 -- Replace $1 with the worker_id you want to search for
-    AND EXTRACT(MONTH FROM date) = EXTRACT(MONTH FROM CURRENT_DATE)
-    AND EXTRACT(YEAR FROM date) = EXTRACT(YEAR FROM CURRENT_DATE)
+    worker_id = CAST($1 AS INTEGER)
+    AND EXTRACT(YEAR FROM date) = CAST($2 AS INTEGER)
+    AND EXTRACT(MONTH FROM date) = CAST($3 AS INTEGER)
     AND deleted_at = 0
 ORDER BY 
     date
 `
+
+type PaidMonthlyDataParams struct {
+	Column1 int32
+	Column2 int32
+	Column3 int32
+}
 
 type PaidMonthlyDataRow struct {
 	WorkerID  int32
@@ -330,8 +352,8 @@ type PaidMonthlyDataRow struct {
 	CreatedAt sql.NullTime
 }
 
-func (q *Queries) PaidMonthlyData(ctx context.Context, workerID int32) ([]PaidMonthlyDataRow, error) {
-	rows, err := q.db.QueryContext(ctx, paidMonthlyData, workerID)
+func (q *Queries) PaidMonthlyData(ctx context.Context, arg PaidMonthlyDataParams) ([]PaidMonthlyDataRow, error) {
+	rows, err := q.db.QueryContext(ctx, paidMonthlyData, arg.Column1, arg.Column2, arg.Column3)
 	if err != nil {
 		return nil, err
 	}

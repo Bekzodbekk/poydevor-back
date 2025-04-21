@@ -69,10 +69,14 @@ func (h *HandlersST) LoadBlocks(ctx *gin.Context) {
 }
 
 func (h *HandlersST) MonthlyReport(ctx *gin.Context) {
-	workerId := ctx.Param("worker_id")
+	workerId := ctx.Query("worker_id")
+	month := ctx.Query("month")
+	year := ctx.Query("year")
 
 	resp, err := h.service.MonthlyReport(ctx, &workerspb.MonthlyReportReq{
-		Id: workerId,
+		Id:    workerId,
+		Month: month,
+		Year:  year,
 	})
 	if err != nil {
 		ctx.JSON(400, err.Error())

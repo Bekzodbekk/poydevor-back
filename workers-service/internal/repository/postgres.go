@@ -166,7 +166,21 @@ func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyR
 		return nil, err
 	}
 
-	endDayResp, err := w.queries.EndDayDataMonthlyReport(ctx, int32(worker_id))
+	year, err := strconv.Atoi(req.Year)
+	if err != nil {
+		return nil, err
+	}
+
+	month, err := strconv.Atoi(req.Month)
+	if err != nil {
+		return nil, err
+	}
+	endDayResp, err := w.queries.EndDayDataMonthlyReport(ctx, storage.EndDayDataMonthlyReportParams{
+		Column1: int32(worker_id),
+		Column2: int32(year),
+		Column3: int32(month),
+	})
+
 	if err != nil {
 		return nil, err
 	}
@@ -184,7 +198,11 @@ func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyR
 	}
 
 	loadBlocksData := []*workerspb.LoadBlocksData{}
-	loadBlocksDataResp, err := w.queries.LoadBlocksDataMonthlyReport(ctx, int32(worker_id))
+	loadBlocksDataResp, err := w.queries.LoadBlocksDataMonthlyReport(ctx, storage.LoadBlocksDataMonthlyReportParams{
+		Column1: int32(worker_id),
+		Column2: int32(year),
+		Column3: int32(month),
+	})
 	if err != nil {
 		return nil, err
 	}
@@ -200,7 +218,11 @@ func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyR
 	}
 
 	paidMonthlyData := []*workerspb.PaidMonthly{}
-	paidMonthlyDataResp, err := w.queries.PaidMonthlyData(ctx, int32(worker_id))
+	paidMonthlyDataResp, err := w.queries.PaidMonthlyData(ctx, storage.PaidMonthlyDataParams{
+		Column1: int32(worker_id),
+		Column2: int32(year),
+		Column3: int32(month),
+	})
 	if err != nil {
 		return nil, err
 	}

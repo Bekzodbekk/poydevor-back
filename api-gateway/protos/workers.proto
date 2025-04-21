@@ -68,7 +68,9 @@ string message = 2;
 
 // MonthlyReport
 message MonthlyReportReq{
-string id = 1;
+    string id = 1;
+    string month = 2;
+    string year = 3;
 }
 message EndDayData{
 string date = 1;

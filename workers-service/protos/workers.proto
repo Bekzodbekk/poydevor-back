@@ -69,7 +69,10 @@ string message = 2;
 // MonthlyReport
 message MonthlyReportReq{
 string id = 1;
+string month = 2;
+string year = 3;
 }
+
 message EndDayData{
 string date = 1;
 int32 count_blocks = 2;
@@ -77,6 +80,7 @@ int32 workers_count = 3;
 int32 worker_share = 4;
 int64 total_price = 5;
 }
+
 message LoadBlocksData{
 string date = 1;
 int32 count_blocks = 2;

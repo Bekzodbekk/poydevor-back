@@ -21,7 +21,7 @@ func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 	r.POST("/v1/workers/load-blocks", newHandlers.LoadBlocks)
 	r.POST("/v1/workers/paid_monthly/:worker_id", newHandlers.AddPaidMonthly)
 	r.GET("/v1/workers/all-workers", newHandlers.AllWorkers)
-	r.GET("/v1/workers/monthly-report/:worker_id", newHandlers.MonthlyReport)
+	r.GET("/v1/workers/monthly-report", newHandlers.MonthlyReport)
 
 	tlsConfig := &tls.Config{
 		CurvePreferences: []tls.CurveID{tls.X25519, tls.CurveP256},
