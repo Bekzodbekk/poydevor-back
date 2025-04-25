@@ -255,3 +255,48 @@ func (w *WorkersREPO) AddPaidMonthly(ctx context.Context, req *workerspb.PaidWor
 		Message: "Paid successfully",
 	}, nil
 }
+
+func (w *WorkersREPO) UpdateWorker(ctx context.Context, req *workerspb.UpdateWorkerReq) (*workerspb.UpdateWorkerResp, error) {
+	id, err := strconv.Atoi(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	err = w.queries.UpdateWorkers(ctx, storage.UpdateWorkersParams{
+		ID:        int32(id),
+		FirstName: req.FirstName,
+		LastName:  req.LastName,
+		Phone:     req.Phone,
+	})
+
+	if err != nil {
+		return nil, err
+	}
+
+	return &workerspb.UpdateWorkerResp{
+		Status:  true,
+		Message: "Update worker Successfuly",
+	}, nil
+
+}
+
+func (w *WorkersREPO) DeleteWorker(ctx context.Context, req *workerspb.DeleteWorkerReq) (*workerspb.DeleteWorkerResp, error) {
+	id, err := strconv.Atoi(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	err = w.queries.DeleteWorkers(ctx, storage.DeleteWorkersParams{
+		ID:        int32(id),
+		DeletedAt: sql.NullInt32{Int32: int32(time.Now().Unix()), Valid: true},
+	})
+	if err != nil {
+		return nil, err
+	}
+
+	return &workerspb.DeleteWorkerResp{
+		Status:  true,
+		Message: "Delete Worker Successfuly",
+	}, nil
+
+}

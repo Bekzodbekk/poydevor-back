@@ -34,3 +34,6 @@ func (s *ServiceRepositoryClient) MonthlyReport(ctx context.Context, req *worker
 func (s *ServiceRepositoryClient) AddPaidMonthly(ctx context.Context, req *workerspb.PaidWorkerMonthlyReq) (*workerspb.PaidWorkerMonthlyResp, error) {
 	return s.WorkersServiceClient.AddPaidMonthly(ctx, req)
 }
+func (s *ServiceRepositoryClient) UpdateWorker(ctx context.Context, req *workerspb.UpdateWorkerReq) (*workerspb.UpdateWorkerResp, error) {
+	return s.WorkersServiceClient.UpdateWorker(ctx, req)
+}

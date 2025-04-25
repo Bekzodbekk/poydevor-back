@@ -12,4 +12,6 @@ type IWorkersRepository interface {
 	LoadBlocks(ctx context.Context, req *workerspb.LoadBlocksReq) (*workerspb.LoadBlocksResp, error)
 	MonthlyReport(ctx context.Context, req *workerspb.MonthlyReportReq) (*workerspb.MonthlyReportResp, error)
 	AddPaidMonthly(ctx context.Context, req *workerspb.PaidWorkerMonthlyReq) (*workerspb.PaidWorkerMonthlyResp, error)
+	UpdateWorker(ctx context.Context, req *workerspb.UpdateWorkerReq) (*workerspb.UpdateWorkerResp, error)
+	DeleteWorker(ctx context.Context, req *workerspb.DeleteWorkerReq) (*workerspb.DeleteWorkerResp, error)
 }

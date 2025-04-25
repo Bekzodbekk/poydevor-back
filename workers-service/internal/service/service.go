@@ -40,3 +40,9 @@ func (s *Service) MonthlyReport(ctx context.Context, req *workerspb.MonthlyRepor
 func (s *Service) AddPaidMonthly(ctx context.Context, req *workerspb.PaidWorkerMonthlyReq) (*workerspb.PaidWorkerMonthlyResp, error) {
 	return s.repo.AddPaidMonthly(ctx, req)
 }
+func (s *Service) UpdateWorker(ctx context.Context, req *workerspb.UpdateWorkerReq) (*workerspb.UpdateWorkerResp, error) {
+	return s.repo.UpdateWorker(ctx, req)
+}
+func (s *Service) DeleteWorker(ctx context.Context, req *workerspb.DeleteWorkerReq) (*workerspb.DeleteWorkerResp, error) {
+	return s.repo.DeleteWorker(ctx, req)
+}

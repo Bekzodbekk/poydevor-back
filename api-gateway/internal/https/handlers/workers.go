@@ -108,3 +108,31 @@ func (h *HandlersST) AddPaidMonthly(ctx *gin.Context) {
 
 	ctx.JSON(200, resp)
 }
+
+func (h *HandlersST) UpdateWorker(ctx *gin.Context) {
+	id := ctx.Param("worker_id")
+	worker := workerspb.UpdateWorkerReq{}
+	if err := ctx.BindJSON(&worker); err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+	worker.Id = id
+	resp, err := h.service.UpdateWorker(ctx, &worker)
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
+	ctx.JSON(200, resp)
+}
+func (h *HandlersST) DeleteWorker(ctx *gin.Context) {
+	id := ctx.Param("worker_id")
+	resp, err := h.service.WorkersServiceClient.DeleteWorker(ctx, &workerspb.DeleteWorkerReq{
+		Id: id,
+	})
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+	ctx.JSON(200, resp)
+}

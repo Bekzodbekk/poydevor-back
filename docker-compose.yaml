@@ -22,6 +22,7 @@ services:
       - "9000:9000"
     depends_on:
       - workers_service
+    
 
   workers_service: 
     build:

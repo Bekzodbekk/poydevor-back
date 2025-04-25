@@ -9,6 +9,8 @@ rpc EndDay(EndDayReq) returns (EndDayResp);
 rpc LoadBlocks(LoadBlocksReq) returns (LoadBlocksResp);
 rpc MonthlyReport(MonthlyReportReq) returns (MonthlyReportResp);
 rpc AddPaidMonthly(PaidWorkerMonthlyReq) returns (PaidWorkerMonthlyResp);
+rpc UpdateWorker(UpdateWorkerReq) returns (UpdateWorkerResp);
+rpc DeleteWorker(DeleteWorkerReq) returns (DeleteWorkerResp);
 }
 
 
@@ -112,6 +114,27 @@ message PaidWorkerMonthlyReq{
     int64 worker_id = 2;
 }
 message PaidWorkerMonthlyResp{
+    bool status = 1;
+    string message = 2;
+}
+
+// Update worker
+message UpdateWorkerReq{
+    string id = 1;
+    string first_name = 2;
+    string last_name = 3; 
+    string phone = 4;
+}
+message UpdateWorkerResp{
+    bool status = 1;
+    string message = 2;
+}
+
+// Delete Worker
+message DeleteWorkerReq{
+    string id = 1;
+}
+message DeleteWorkerResp{
     bool status = 1;
     string message = 2;
 }

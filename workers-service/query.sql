@@ -146,3 +146,12 @@ VALUES
     ($1, $2, $3);
 
 
+-- name: UpdateWorkers :exec
+UPDATE workers 
+SET first_name = $2, last_name = $3, phone = $4
+WHERE id = $1;
+
+-- name: DeleteWorkers :exec
+UPDATE workers
+SET deleted_at = $2
+WHERE id = $1;
