@@ -25,6 +25,8 @@ func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 	r.GET("/v1/workers/all-workers", newHandlers.AllWorkers)
 	r.GET("/v1/workers/monthly-report", newHandlers.MonthlyReport)
 
+	r.POST("/v1/users/login", newHandlers.Login)
+	
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
 		CurvePreferences:   []tls.CurveID{tls.X25519, tls.CurveP256},

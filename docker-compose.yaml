@@ -7,7 +7,7 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: 1
-      POSTGRES_DB: poydevor_workersdb
+      POSTGRES_DB: postgres
     ports:
       - "5433:5432"
     volumes:
@@ -22,6 +22,7 @@ services:
       - "9000:9000"
     depends_on:
       - workers_service
+      - user_service
     
 
   workers_service: 
@@ -33,6 +34,19 @@ services:
       - "8081:8081"
     depends_on:
       - postgres
+
+      
+  user_service:
+    build:
+      context: ./user-service
+      dockerfile: Dockerfile
+    container_name: user_service
+    ports:
+      - "8082:8082"
+    depends_on:
+      - postgres
+
+  
 
 volumes:
   postgres_data: {}

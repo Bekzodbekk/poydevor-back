@@ -1,0 +1,10 @@
+service:
+  host: user_service
+  port: 8082
+
+postgres:
+  host: postgres
+  port: 5432
+  user: postgres
+  password: 1
+  dbname: poydevor_usersdb

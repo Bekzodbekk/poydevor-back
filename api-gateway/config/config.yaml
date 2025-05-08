@@ -3,6 +3,10 @@ services:
     host: workers_service
     port: 8081
 
+  users-service:
+    host: user_service
+    port: 8082
+    
   api-gateway:
     host: api_gateway
     port: 9000

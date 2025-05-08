@@ -1,0 +1,18 @@
+syntax = "proto3";
+
+option go_package = "genproto/userspb";
+
+service UsersService{
+    rpc Login(LoginReq) returns (LoginResp){};
+}
+
+message LoginReq{
+    string id = 1;
+    string login = 2;
+    string password = 3;
+}
+message LoginResp{
+    bool status = 1;
+    string message = 2;
+    string token = 3;
+}

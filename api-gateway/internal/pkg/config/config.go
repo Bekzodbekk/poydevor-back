@@ -10,10 +10,15 @@ type ApiGateway struct {
 	Host string
 	Port int
 }
+type UserService struct {
+	Host string
+	Port int
+}
 
 type Services struct {
 	WorkersService WorkersService
 	ApiGateway     ApiGateway
+	UserService    UserService
 }
 
 type TLS struct {
@@ -42,6 +47,10 @@ func LOAD(path string) (*Config, error) {
 			ApiGateway: ApiGateway{
 				Host: viper.GetString("services.api-gateway.host"),
 				Port: viper.GetInt("services.api-gateway.port"),
+			},
+			UserService: UserService{
+				Host: viper.GetString("services.user-service.host"),
+				Port: viper.GetInt("services.user-service.port"),
 			},
 		},
 		TLS: TLS{

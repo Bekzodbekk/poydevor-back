@@ -4,6 +4,7 @@ import (
 	"api-gateway/internal/https"
 	"api-gateway/internal/pkg/config"
 	"api-gateway/internal/pkg/service"
+	usersservice "api-gateway/internal/pkg/users-service"
 	workersservice "api-gateway/internal/pkg/workers-service"
 	"context"
 	"fmt"
@@ -24,7 +25,8 @@ func main() {
 	if err != nil {
 		log.Fatal(err)
 	}
-	service := service.NewServiceRepositoryClient(conn1)
+	conn2, err := usersservice.DialWithUsersService(*cfg)
+	service := service.NewServiceRepositoryClient(conn1, conn2)
 
 	r := https.NewGin(service)
 	target := fmt.Sprintf("%s:%d", cfg.Services.ApiGateway.Host, cfg.Services.ApiGateway.Port)
