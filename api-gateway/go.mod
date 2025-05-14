@@ -5,6 +5,7 @@ go 1.23.0
 toolchain go1.24.2
 
 require (
+	github.com/form3tech-oss/jwt-go v3.2.5+incompatible
 	github.com/gin-gonic/gin v1.10.0
 	github.com/spf13/viper v1.20.1
 	google.golang.org/grpc v1.67.3

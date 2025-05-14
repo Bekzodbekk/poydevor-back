@@ -4,7 +4,7 @@ services:
     port: 8081
 
   users-service:
-    host: user_service
+    host: users_service
     port: 8082
     
   api-gateway:

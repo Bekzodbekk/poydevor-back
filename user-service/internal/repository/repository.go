@@ -6,5 +6,5 @@ import (
 )
 
 type IUserRepository interface {
-	Login(cfg context.Context, req *userpb.LoginReq) (*userpb.LoginResp, error)
+	Login(ctx context.Context, req *userpb.LoginReq) (*userpb.LoginResp, error)
 }

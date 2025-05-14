@@ -49,8 +49,8 @@ func LOAD(path string) (*Config, error) {
 				Port: viper.GetInt("services.api-gateway.port"),
 			},
 			UserService: UserService{
-				Host: viper.GetString("services.user-service.host"),
-				Port: viper.GetInt("services.user-service.port"),
+				Host: viper.GetString("services.users-service.host"),
+				Port: viper.GetInt("services.users-service.port"),
 			},
 		},
 		TLS: TLS{

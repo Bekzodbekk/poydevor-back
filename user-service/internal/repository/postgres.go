@@ -4,6 +4,7 @@ import (
 	"context"
 	"database/sql"
 	"errors"
+	"strconv"
 	"user-service/genproto/userspb"
 	"user-service/storage"
 	"user-service/token"
@@ -22,7 +23,8 @@ func NewUserREPO(db *sql.DB, queries *storage.Queries) *UserREPO {
 }
 
 func (u *UserREPO) Login(ctx context.Context, req *userspb.LoginReq) (*userspb.LoginResp, error) {
-	resp, err := u.queries.Login(ctx, req.Login)
+
+	resp, err := u.queries.AuthLogin(ctx, req.Login)
 	if err != nil {
 		if errors.Is(err, sql.ErrNoRows) {
 			return &userspb.LoginResp{
@@ -38,8 +40,8 @@ func (u *UserREPO) Login(ctx context.Context, req *userspb.LoginReq) (*userspb.L
 			Message: "Parol xato!",
 		}, nil
 	}
-
-	accessToken, err := token.CreateJWTToken(req.Id, "PoydevorAdmin")
+	id := strconv.Itoa(int(resp.ID))
+	accessToken, err := token.CreateJWTToken(id, "PoydevorAdmin")
 	if err != nil {
 		return nil, err
 	}

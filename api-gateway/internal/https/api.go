@@ -2,6 +2,7 @@ package https
 
 import (
 	"api-gateway/internal/https/handlers"
+	authmiddleware "api-gateway/internal/https/middleware/AuthMiddleware"
 	corsmiddleware "api-gateway/internal/https/middleware/corsMiddleware"
 	"api-gateway/internal/pkg/service"
 	"crypto/tls"
@@ -15,6 +16,7 @@ func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 
 	newHandlers := handlers.NewHandlers(service)
 	r.Use(corsmiddleware.CorsMiddleware())
+	r.Use(authmiddleware.Middleware())
 
 	r.POST("/v1/workers/add-worker", newHandlers.AddWorkers)
 	r.POST("/v1/workers/end-day", newHandlers.EndDay)
@@ -26,7 +28,8 @@ func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 	r.GET("/v1/workers/monthly-report", newHandlers.MonthlyReport)
 
 	r.POST("/v1/users/login", newHandlers.Login)
-	
+	r.GET("/v1/check_me", newHandlers.CheckToken)
+
 	tlsConfig := &tls.Config{
 		InsecureSkipVerify: true,
 		CurvePreferences:   []tls.CurveID{tls.X25519, tls.CurveP256},

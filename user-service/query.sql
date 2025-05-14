@@ -4,6 +4,5 @@ INSERT INTO users
 VALUES 
     ($1, $2);
 
--- name: Login :one
-SELECT id, login, password FROM users
-WHERE login = $1;
+-- name: AuthLogin :one
+SELECT * FROM users WHERE login = $1;

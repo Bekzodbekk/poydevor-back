@@ -4,8 +4,15 @@
 
 package storage
 
+import (
+	"database/sql"
+)
+
 type User struct {
-	ID       int32
-	Login    string
-	Password string
+	ID        int32
+	Login     string
+	Password  string
+	CreatedAt sql.NullTime
+	UpdatedAt sql.NullTime
+	DeletedAt sql.NullInt64
 }

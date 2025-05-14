@@ -26,6 +26,9 @@ func main() {
 		log.Fatal(err)
 	}
 	conn2, err := usersservice.DialWithUsersService(*cfg)
+	if err != nil {
+		log.Fatal(err)
+	}
 	service := service.NewServiceRepositoryClient(conn1, conn2)
 
 	r := https.NewGin(service)
@@ -36,7 +39,6 @@ func main() {
 	sigChan := make(chan os.Signal, 1)
 	signal.Notify(sigChan, syscall.SIGINT, syscall.SIGTERM)
 	go func() {
-
 		if err := r.ListenAndServeTLS(cfg.TLS.CertFile, cfg.TLS.KeyFile); err != nil {
 			log.Fatal(err)
 		}

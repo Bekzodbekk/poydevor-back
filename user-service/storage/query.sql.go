@@ -9,6 +9,24 @@ import (
 	"context"
 )
 
+const authLogin = `-- name: AuthLogin :one
+SELECT id, login, password, created_at, updated_at, deleted_at FROM users WHERE login = $1
+`
+
+func (q *Queries) AuthLogin(ctx context.Context, login string) (User, error) {
+	row := q.db.QueryRowContext(ctx, authLogin, login)
+	var i User
+	err := row.Scan(
+		&i.ID,
+		&i.Login,
+		&i.Password,
+		&i.CreatedAt,
+		&i.UpdatedAt,
+		&i.DeletedAt,
+	)
+	return i, err
+}
+
 const insertUser = `-- name: InsertUser :exec
 INSERT INTO users
     (login, password)
@@ -24,16 +42,4 @@ type InsertUserParams struct {
 func (q *Queries) InsertUser(ctx context.Context, arg InsertUserParams) error {
 	_, err := q.db.ExecContext(ctx, insertUser, arg.Login, arg.Password)
 	return err
-}
-
-const login = `-- name: Login :one
-SELECT id, login, password FROM users
-WHERE login = $1
-`
-
-func (q *Queries) Login(ctx context.Context, login string) (User, error) {
-	row := q.db.QueryRowContext(ctx, login, login)
-	var i User
-	err := row.Scan(&i.ID, &i.Login, &i.Password)
-	return i, err
 }

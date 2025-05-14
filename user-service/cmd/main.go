@@ -22,7 +22,7 @@ func main() {
 	queries := postgres.QueriesDB(db)
 	userRepo := repository.NewUserREPO(db, queries)
 	service := service.NewService(userRepo)
-	runService := RunService.NewRunService(&service)
+	runService := RunService.NewRunService(service)
 
 	log.Printf("User Service running on :%d port", cfg.ServicePort)
 	if err := runService.Run(cfg); err != nil {
