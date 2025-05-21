@@ -612,11 +612,12 @@ func (x *MonthlyReportReq) GetYear() string {
 
 type EndDayData struct {
 	state         protoimpl.MessageState `protogen:"open.v1"`
-	Date          string                 `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
-	CountBlocks   int32                  `protobuf:"varint,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
-	WorkersCount  int32                  `protobuf:"varint,3,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
-	WorkerShare   string                 `protobuf:"bytes,4,opt,name=worker_share,json=workerShare,proto3" json:"worker_share,omitempty"`
-	TotalPrice    string                 `protobuf:"bytes,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Date          string                 `protobuf:"bytes,2,opt,name=date,proto3" json:"date,omitempty"`
+	CountBlocks   int32                  `protobuf:"varint,3,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
+	WorkersCount  int32                  `protobuf:"varint,4,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
+	WorkerShare   string                 `protobuf:"bytes,5,opt,name=worker_share,json=workerShare,proto3" json:"worker_share,omitempty"`
+	TotalPrice    string                 `protobuf:"bytes,6,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
 	unknownFields protoimpl.UnknownFields
 	sizeCache     protoimpl.SizeCache
 }
@@ -649,6 +650,13 @@ func (x *EndDayData) ProtoReflect() protoreflect.Message {
 // Deprecated: Use EndDayData.ProtoReflect.Descriptor instead.
 func (*EndDayData) Descriptor() ([]byte, []int) {
 	return file_protos_workers_proto_rawDescGZIP(), []int{10}
+}
+
+func (x *EndDayData) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
 }
 
 func (x *EndDayData) GetDate() string {
@@ -688,11 +696,12 @@ func (x *EndDayData) GetTotalPrice() string {
 
 type LoadBlocksData struct {
 	state           protoimpl.MessageState `protogen:"open.v1"`
-	Date            string                 `protobuf:"bytes,1,opt,name=date,proto3" json:"date,omitempty"`
-	CountBlocks     int32                  `protobuf:"varint,2,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
-	WorkersCount    int32                  `protobuf:"varint,3,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
-	BlocksPerWorker string                 `protobuf:"bytes,4,opt,name=blocks_per_worker,json=blocksPerWorker,proto3" json:"blocks_per_worker,omitempty"`
-	TotalPrice      string                 `protobuf:"bytes,5,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
+	Id              string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	Date            string                 `protobuf:"bytes,2,opt,name=date,proto3" json:"date,omitempty"`
+	CountBlocks     int32                  `protobuf:"varint,3,opt,name=count_blocks,json=countBlocks,proto3" json:"count_blocks,omitempty"`
+	WorkersCount    int32                  `protobuf:"varint,4,opt,name=workers_count,json=workersCount,proto3" json:"workers_count,omitempty"`
+	BlocksPerWorker string                 `protobuf:"bytes,5,opt,name=blocks_per_worker,json=blocksPerWorker,proto3" json:"blocks_per_worker,omitempty"`
+	TotalPrice      string                 `protobuf:"bytes,6,opt,name=total_price,json=totalPrice,proto3" json:"total_price,omitempty"`
 	unknownFields   protoimpl.UnknownFields
 	sizeCache       protoimpl.SizeCache
 }
@@ -725,6 +734,13 @@ func (x *LoadBlocksData) ProtoReflect() protoreflect.Message {
 // Deprecated: Use LoadBlocksData.ProtoReflect.Descriptor instead.
 func (*LoadBlocksData) Descriptor() ([]byte, []int) {
 	return file_protos_workers_proto_rawDescGZIP(), []int{11}
+}
+
+func (x *LoadBlocksData) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
 }
 
 func (x *LoadBlocksData) GetDate() string {
@@ -1200,6 +1216,110 @@ func (x *DeleteWorkerResp) GetMessage() string {
 	return ""
 }
 
+type GetDailyProductionWorkersByIdReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDailyProductionWorkersByIdReq) Reset() {
+	*x = GetDailyProductionWorkersByIdReq{}
+	mi := &file_protos_workers_proto_msgTypes[20]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDailyProductionWorkersByIdReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDailyProductionWorkersByIdReq) ProtoMessage() {}
+
+func (x *GetDailyProductionWorkersByIdReq) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_workers_proto_msgTypes[20]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDailyProductionWorkersByIdReq.ProtoReflect.Descriptor instead.
+func (*GetDailyProductionWorkersByIdReq) Descriptor() ([]byte, []int) {
+	return file_protos_workers_proto_rawDescGZIP(), []int{20}
+}
+
+func (x *GetDailyProductionWorkersByIdReq) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type GetDailyProductionWorkersByIdResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Worker        []*Worker              `protobuf:"bytes,3,rep,name=Worker,proto3" json:"Worker,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetDailyProductionWorkersByIdResp) Reset() {
+	*x = GetDailyProductionWorkersByIdResp{}
+	mi := &file_protos_workers_proto_msgTypes[21]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetDailyProductionWorkersByIdResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetDailyProductionWorkersByIdResp) ProtoMessage() {}
+
+func (x *GetDailyProductionWorkersByIdResp) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_workers_proto_msgTypes[21]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetDailyProductionWorkersByIdResp.ProtoReflect.Descriptor instead.
+func (*GetDailyProductionWorkersByIdResp) Descriptor() ([]byte, []int) {
+	return file_protos_workers_proto_rawDescGZIP(), []int{21}
+}
+
+func (x *GetDailyProductionWorkersByIdResp) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
+func (x *GetDailyProductionWorkersByIdResp) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetDailyProductionWorkersByIdResp) GetWorker() []*Worker {
+	if x != nil {
+		return x.Worker
+	}
+	return nil
+}
+
 var File_protos_workers_proto protoreflect.FileDescriptor
 
 const file_protos_workers_proto_rawDesc = "" +
@@ -1246,21 +1366,23 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\x10MonthlyReportReq\x12\x0e\n" +
 	"\x02id\x18\x01 \x01(\tR\x02id\x12\x14\n" +
 	"\x05month\x18\x02 \x01(\tR\x05month\x12\x12\n" +
-	"\x04year\x18\x03 \x01(\tR\x04year\"\xac\x01\n" +
+	"\x04year\x18\x03 \x01(\tR\x04year\"\xbc\x01\n" +
 	"\n" +
-	"EndDayData\x12\x12\n" +
-	"\x04date\x18\x01 \x01(\tR\x04date\x12!\n" +
-	"\fcount_blocks\x18\x02 \x01(\x05R\vcountBlocks\x12#\n" +
-	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12!\n" +
-	"\fworker_share\x18\x04 \x01(\tR\vworkerShare\x12\x1f\n" +
-	"\vtotal_price\x18\x05 \x01(\tR\n" +
-	"totalPrice\"\xb9\x01\n" +
-	"\x0eLoadBlocksData\x12\x12\n" +
-	"\x04date\x18\x01 \x01(\tR\x04date\x12!\n" +
-	"\fcount_blocks\x18\x02 \x01(\x05R\vcountBlocks\x12#\n" +
-	"\rworkers_count\x18\x03 \x01(\x05R\fworkersCount\x12*\n" +
-	"\x11blocks_per_worker\x18\x04 \x01(\tR\x0fblocksPerWorker\x12\x1f\n" +
-	"\vtotal_price\x18\x05 \x01(\tR\n" +
+	"EndDayData\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04date\x18\x02 \x01(\tR\x04date\x12!\n" +
+	"\fcount_blocks\x18\x03 \x01(\x05R\vcountBlocks\x12#\n" +
+	"\rworkers_count\x18\x04 \x01(\x05R\fworkersCount\x12!\n" +
+	"\fworker_share\x18\x05 \x01(\tR\vworkerShare\x12\x1f\n" +
+	"\vtotal_price\x18\x06 \x01(\tR\n" +
+	"totalPrice\"\xc9\x01\n" +
+	"\x0eLoadBlocksData\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\x12\x12\n" +
+	"\x04date\x18\x02 \x01(\tR\x04date\x12!\n" +
+	"\fcount_blocks\x18\x03 \x01(\x05R\vcountBlocks\x12#\n" +
+	"\rworkers_count\x18\x04 \x01(\x05R\fworkersCount\x12*\n" +
+	"\x11blocks_per_worker\x18\x05 \x01(\tR\x0fblocksPerWorker\x12\x1f\n" +
+	"\vtotal_price\x18\x06 \x01(\tR\n" +
 	"totalPrice\"@\n" +
 	"\vPaidMonthly\x12\x12\n" +
 	"\x04date\x18\x01 \x01(\tR\x04date\x12\x1d\n" +
@@ -1291,7 +1413,13 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\x02id\x18\x01 \x01(\tR\x02id\"D\n" +
 	"\x10DeleteWorkerResp\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +
-	"\amessage\x18\x02 \x01(\tR\amessage2\xa3\x03\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\"2\n" +
+	" GetDailyProductionWorkersByIdReq\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"v\n" +
+	"!GetDailyProductionWorkersByIdResp\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1f\n" +
+	"\x06Worker\x18\x03 \x03(\v2\a.WorkerR\x06Worker2\x8b\x04\n" +
 	"\x0eWorkersService\x12-\n" +
 	"\n" +
 	"AddWorkers\x12\x0e.AddWorkersReq\x1a\x0f.AddWorkersResp\x12-\n" +
@@ -1304,7 +1432,8 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\rMonthlyReport\x12\x11.MonthlyReportReq\x1a\x12.MonthlyReportResp\x12?\n" +
 	"\x0eAddPaidMonthly\x12\x15.PaidWorkerMonthlyReq\x1a\x16.PaidWorkerMonthlyResp\x123\n" +
 	"\fUpdateWorker\x12\x10.UpdateWorkerReq\x1a\x11.UpdateWorkerResp\x123\n" +
-	"\fDeleteWorker\x12\x10.DeleteWorkerReq\x1a\x11.DeleteWorkerRespB\x14Z\x12genproto/workerspbb\x06proto3"
+	"\fDeleteWorker\x12\x10.DeleteWorkerReq\x1a\x11.DeleteWorkerResp\x12f\n" +
+	"\x1dGetDailyProductionWorkersById\x12!.GetDailyProductionWorkersByIdReq\x1a\".GetDailyProductionWorkersByIdRespB\x14Z\x12genproto/workerspbb\x06proto3"
 
 var (
 	file_protos_workers_proto_rawDescOnce sync.Once
@@ -1318,55 +1447,60 @@ func file_protos_workers_proto_rawDescGZIP() []byte {
 	return file_protos_workers_proto_rawDescData
 }
 
-var file_protos_workers_proto_msgTypes = make([]protoimpl.MessageInfo, 20)
+var file_protos_workers_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
 var file_protos_workers_proto_goTypes = []any{
-	(*AddWorkersReq)(nil),         // 0: AddWorkersReq
-	(*AddWorkersResp)(nil),        // 1: AddWorkersResp
-	(*Worker)(nil),                // 2: Worker
-	(*GetWorkersReq)(nil),         // 3: GetWorkersReq
-	(*GetWorkersResp)(nil),        // 4: GetWorkersResp
-	(*EndDayReq)(nil),             // 5: EndDayReq
-	(*EndDayResp)(nil),            // 6: EndDayResp
-	(*LoadBlocksReq)(nil),         // 7: LoadBlocksReq
-	(*LoadBlocksResp)(nil),        // 8: LoadBlocksResp
-	(*MonthlyReportReq)(nil),      // 9: MonthlyReportReq
-	(*EndDayData)(nil),            // 10: EndDayData
-	(*LoadBlocksData)(nil),        // 11: LoadBlocksData
-	(*PaidMonthly)(nil),           // 12: PaidMonthly
-	(*MonthlyReportResp)(nil),     // 13: MonthlyReportResp
-	(*PaidWorkerMonthlyReq)(nil),  // 14: PaidWorkerMonthlyReq
-	(*PaidWorkerMonthlyResp)(nil), // 15: PaidWorkerMonthlyResp
-	(*UpdateWorkerReq)(nil),       // 16: UpdateWorkerReq
-	(*UpdateWorkerResp)(nil),      // 17: UpdateWorkerResp
-	(*DeleteWorkerReq)(nil),       // 18: DeleteWorkerReq
-	(*DeleteWorkerResp)(nil),      // 19: DeleteWorkerResp
+	(*AddWorkersReq)(nil),                     // 0: AddWorkersReq
+	(*AddWorkersResp)(nil),                    // 1: AddWorkersResp
+	(*Worker)(nil),                            // 2: Worker
+	(*GetWorkersReq)(nil),                     // 3: GetWorkersReq
+	(*GetWorkersResp)(nil),                    // 4: GetWorkersResp
+	(*EndDayReq)(nil),                         // 5: EndDayReq
+	(*EndDayResp)(nil),                        // 6: EndDayResp
+	(*LoadBlocksReq)(nil),                     // 7: LoadBlocksReq
+	(*LoadBlocksResp)(nil),                    // 8: LoadBlocksResp
+	(*MonthlyReportReq)(nil),                  // 9: MonthlyReportReq
+	(*EndDayData)(nil),                        // 10: EndDayData
+	(*LoadBlocksData)(nil),                    // 11: LoadBlocksData
+	(*PaidMonthly)(nil),                       // 12: PaidMonthly
+	(*MonthlyReportResp)(nil),                 // 13: MonthlyReportResp
+	(*PaidWorkerMonthlyReq)(nil),              // 14: PaidWorkerMonthlyReq
+	(*PaidWorkerMonthlyResp)(nil),             // 15: PaidWorkerMonthlyResp
+	(*UpdateWorkerReq)(nil),                   // 16: UpdateWorkerReq
+	(*UpdateWorkerResp)(nil),                  // 17: UpdateWorkerResp
+	(*DeleteWorkerReq)(nil),                   // 18: DeleteWorkerReq
+	(*DeleteWorkerResp)(nil),                  // 19: DeleteWorkerResp
+	(*GetDailyProductionWorkersByIdReq)(nil),  // 20: GetDailyProductionWorkersByIdReq
+	(*GetDailyProductionWorkersByIdResp)(nil), // 21: GetDailyProductionWorkersByIdResp
 }
 var file_protos_workers_proto_depIdxs = []int32{
 	2,  // 0: GetWorkersResp.workers:type_name -> Worker
 	10, // 1: MonthlyReportResp.end_day_data:type_name -> EndDayData
 	11, // 2: MonthlyReportResp.load_blocks_data:type_name -> LoadBlocksData
 	12, // 3: MonthlyReportResp.paid_monthly:type_name -> PaidMonthly
-	0,  // 4: WorkersService.AddWorkers:input_type -> AddWorkersReq
-	3,  // 5: WorkersService.GetWorkers:input_type -> GetWorkersReq
-	5,  // 6: WorkersService.EndDay:input_type -> EndDayReq
-	7,  // 7: WorkersService.LoadBlocks:input_type -> LoadBlocksReq
-	9,  // 8: WorkersService.MonthlyReport:input_type -> MonthlyReportReq
-	14, // 9: WorkersService.AddPaidMonthly:input_type -> PaidWorkerMonthlyReq
-	16, // 10: WorkersService.UpdateWorker:input_type -> UpdateWorkerReq
-	18, // 11: WorkersService.DeleteWorker:input_type -> DeleteWorkerReq
-	1,  // 12: WorkersService.AddWorkers:output_type -> AddWorkersResp
-	4,  // 13: WorkersService.GetWorkers:output_type -> GetWorkersResp
-	6,  // 14: WorkersService.EndDay:output_type -> EndDayResp
-	8,  // 15: WorkersService.LoadBlocks:output_type -> LoadBlocksResp
-	13, // 16: WorkersService.MonthlyReport:output_type -> MonthlyReportResp
-	15, // 17: WorkersService.AddPaidMonthly:output_type -> PaidWorkerMonthlyResp
-	17, // 18: WorkersService.UpdateWorker:output_type -> UpdateWorkerResp
-	19, // 19: WorkersService.DeleteWorker:output_type -> DeleteWorkerResp
-	12, // [12:20] is the sub-list for method output_type
-	4,  // [4:12] is the sub-list for method input_type
-	4,  // [4:4] is the sub-list for extension type_name
-	4,  // [4:4] is the sub-list for extension extendee
-	0,  // [0:4] is the sub-list for field type_name
+	2,  // 4: GetDailyProductionWorkersByIdResp.Worker:type_name -> Worker
+	0,  // 5: WorkersService.AddWorkers:input_type -> AddWorkersReq
+	3,  // 6: WorkersService.GetWorkers:input_type -> GetWorkersReq
+	5,  // 7: WorkersService.EndDay:input_type -> EndDayReq
+	7,  // 8: WorkersService.LoadBlocks:input_type -> LoadBlocksReq
+	9,  // 9: WorkersService.MonthlyReport:input_type -> MonthlyReportReq
+	14, // 10: WorkersService.AddPaidMonthly:input_type -> PaidWorkerMonthlyReq
+	16, // 11: WorkersService.UpdateWorker:input_type -> UpdateWorkerReq
+	18, // 12: WorkersService.DeleteWorker:input_type -> DeleteWorkerReq
+	20, // 13: WorkersService.GetDailyProductionWorkersById:input_type -> GetDailyProductionWorkersByIdReq
+	1,  // 14: WorkersService.AddWorkers:output_type -> AddWorkersResp
+	4,  // 15: WorkersService.GetWorkers:output_type -> GetWorkersResp
+	6,  // 16: WorkersService.EndDay:output_type -> EndDayResp
+	8,  // 17: WorkersService.LoadBlocks:output_type -> LoadBlocksResp
+	13, // 18: WorkersService.MonthlyReport:output_type -> MonthlyReportResp
+	15, // 19: WorkersService.AddPaidMonthly:output_type -> PaidWorkerMonthlyResp
+	17, // 20: WorkersService.UpdateWorker:output_type -> UpdateWorkerResp
+	19, // 21: WorkersService.DeleteWorker:output_type -> DeleteWorkerResp
+	21, // 22: WorkersService.GetDailyProductionWorkersById:output_type -> GetDailyProductionWorkersByIdResp
+	14, // [14:23] is the sub-list for method output_type
+	5,  // [5:14] is the sub-list for method input_type
+	5,  // [5:5] is the sub-list for extension type_name
+	5,  // [5:5] is the sub-list for extension extendee
+	0,  // [0:5] is the sub-list for field type_name
 }
 
 func init() { file_protos_workers_proto_init() }
@@ -1380,7 +1514,7 @@ func file_protos_workers_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_protos_workers_proto_rawDesc), len(file_protos_workers_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   20,
+			NumMessages:   22,
 			NumExtensions: 0,
 			NumServices:   1,
 		},

@@ -45,6 +45,7 @@ VALUES
 WITH worker_blocks AS (
     -- Get all production IDs where the worker participated
     SELECT 
+        dp.id,
         dpw.daily_production_id,
         dp.date,
         dp.count_blocks
@@ -88,6 +89,7 @@ ORDER BY
 -- name: LoadBlocksDataMonthlyReport :many
 WITH worker_payments AS (
     SELECT
+        sb.id,
         lp.worker_id,
         sb.date,
         sb.count_blocks AS total_blocks,
@@ -110,6 +112,7 @@ WITH worker_payments AS (
         lp.worker_id, sb.id, sb.date, sb.count_blocks, sb.address, sb.load_price
 )
 SELECT 
+    id as send_block_id,
     worker_id,
     date,
     address,
@@ -155,3 +158,17 @@ WHERE id = $1;
 UPDATE workers
 SET deleted_at = $2
 WHERE id = $1;
+
+-- name: GetDailyProductionWorkersNameById :many
+SELECT 
+    w.id,
+    w.first_name,
+    w.last_name
+FROM 
+    daily_production_workers dpw
+JOIN 
+    workers w ON dpw.worker_id = w.id
+WHERE 
+    dpw.daily_production_id = $1 
+    AND dpw.deleted_at = 0
+    AND w.deleted_at = 0;

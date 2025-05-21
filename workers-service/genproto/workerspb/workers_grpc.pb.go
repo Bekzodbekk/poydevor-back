@@ -19,14 +19,15 @@ import (
 const _ = grpc.SupportPackageIsVersion9
 
 const (
-	WorkersService_AddWorkers_FullMethodName     = "/WorkersService/AddWorkers"
-	WorkersService_GetWorkers_FullMethodName     = "/WorkersService/GetWorkers"
-	WorkersService_EndDay_FullMethodName         = "/WorkersService/EndDay"
-	WorkersService_LoadBlocks_FullMethodName     = "/WorkersService/LoadBlocks"
-	WorkersService_MonthlyReport_FullMethodName  = "/WorkersService/MonthlyReport"
-	WorkersService_AddPaidMonthly_FullMethodName = "/WorkersService/AddPaidMonthly"
-	WorkersService_UpdateWorker_FullMethodName   = "/WorkersService/UpdateWorker"
-	WorkersService_DeleteWorker_FullMethodName   = "/WorkersService/DeleteWorker"
+	WorkersService_AddWorkers_FullMethodName                    = "/WorkersService/AddWorkers"
+	WorkersService_GetWorkers_FullMethodName                    = "/WorkersService/GetWorkers"
+	WorkersService_EndDay_FullMethodName                        = "/WorkersService/EndDay"
+	WorkersService_LoadBlocks_FullMethodName                    = "/WorkersService/LoadBlocks"
+	WorkersService_MonthlyReport_FullMethodName                 = "/WorkersService/MonthlyReport"
+	WorkersService_AddPaidMonthly_FullMethodName                = "/WorkersService/AddPaidMonthly"
+	WorkersService_UpdateWorker_FullMethodName                  = "/WorkersService/UpdateWorker"
+	WorkersService_DeleteWorker_FullMethodName                  = "/WorkersService/DeleteWorker"
+	WorkersService_GetDailyProductionWorkersById_FullMethodName = "/WorkersService/GetDailyProductionWorkersById"
 )
 
 // WorkersServiceClient is the client API for WorkersService service.
@@ -41,6 +42,7 @@ type WorkersServiceClient interface {
 	AddPaidMonthly(ctx context.Context, in *PaidWorkerMonthlyReq, opts ...grpc.CallOption) (*PaidWorkerMonthlyResp, error)
 	UpdateWorker(ctx context.Context, in *UpdateWorkerReq, opts ...grpc.CallOption) (*UpdateWorkerResp, error)
 	DeleteWorker(ctx context.Context, in *DeleteWorkerReq, opts ...grpc.CallOption) (*DeleteWorkerResp, error)
+	GetDailyProductionWorkersById(ctx context.Context, in *GetDailyProductionWorkersByIdReq, opts ...grpc.CallOption) (*GetDailyProductionWorkersByIdResp, error)
 }
 
 type workersServiceClient struct {
@@ -131,6 +133,16 @@ func (c *workersServiceClient) DeleteWorker(ctx context.Context, in *DeleteWorke
 	return out, nil
 }
 
+func (c *workersServiceClient) GetDailyProductionWorkersById(ctx context.Context, in *GetDailyProductionWorkersByIdReq, opts ...grpc.CallOption) (*GetDailyProductionWorkersByIdResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetDailyProductionWorkersByIdResp)
+	err := c.cc.Invoke(ctx, WorkersService_GetDailyProductionWorkersById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkersServiceServer is the server API for WorkersService service.
 // All implementations must embed UnimplementedWorkersServiceServer
 // for forward compatibility.
@@ -143,6 +155,7 @@ type WorkersServiceServer interface {
 	AddPaidMonthly(context.Context, *PaidWorkerMonthlyReq) (*PaidWorkerMonthlyResp, error)
 	UpdateWorker(context.Context, *UpdateWorkerReq) (*UpdateWorkerResp, error)
 	DeleteWorker(context.Context, *DeleteWorkerReq) (*DeleteWorkerResp, error)
+	GetDailyProductionWorkersById(context.Context, *GetDailyProductionWorkersByIdReq) (*GetDailyProductionWorkersByIdResp, error)
 	mustEmbedUnimplementedWorkersServiceServer()
 }
 
@@ -176,6 +189,9 @@ func (UnimplementedWorkersServiceServer) UpdateWorker(context.Context, *UpdateWo
 }
 func (UnimplementedWorkersServiceServer) DeleteWorker(context.Context, *DeleteWorkerReq) (*DeleteWorkerResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method DeleteWorker not implemented")
+}
+func (UnimplementedWorkersServiceServer) GetDailyProductionWorkersById(context.Context, *GetDailyProductionWorkersByIdReq) (*GetDailyProductionWorkersByIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetDailyProductionWorkersById not implemented")
 }
 func (UnimplementedWorkersServiceServer) mustEmbedUnimplementedWorkersServiceServer() {}
 func (UnimplementedWorkersServiceServer) testEmbeddedByValue()                        {}
@@ -342,6 +358,24 @@ func _WorkersService_DeleteWorker_Handler(srv interface{}, ctx context.Context, 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkersService_GetDailyProductionWorkersById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetDailyProductionWorkersByIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkersServiceServer).GetDailyProductionWorkersById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkersService_GetDailyProductionWorkersById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkersServiceServer).GetDailyProductionWorkersById(ctx, req.(*GetDailyProductionWorkersByIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkersService_ServiceDesc is the grpc.ServiceDesc for WorkersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -380,6 +414,10 @@ var WorkersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "DeleteWorker",
 			Handler:    _WorkersService_DeleteWorker_Handler,
+		},
+		{
+			MethodName: "GetDailyProductionWorkersById",
+			Handler:    _WorkersService_GetDailyProductionWorkersById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

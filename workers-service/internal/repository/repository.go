@@ -14,4 +14,5 @@ type IWorkersRepository interface {
 	AddPaidMonthly(ctx context.Context, req *workerspb.PaidWorkerMonthlyReq) (*workerspb.PaidWorkerMonthlyResp, error)
 	UpdateWorker(ctx context.Context, req *workerspb.UpdateWorkerReq) (*workerspb.UpdateWorkerResp, error)
 	DeleteWorker(ctx context.Context, req *workerspb.DeleteWorkerReq) (*workerspb.DeleteWorkerResp, error)
+	GetDailyProductionWorkersById(ctx context.Context, req *workerspb.GetDailyProductionWorkersByIdReq) (*workerspb.GetDailyProductionWorkersByIdResp, error)
 }

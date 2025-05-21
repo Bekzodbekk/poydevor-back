@@ -11,6 +11,7 @@ rpc MonthlyReport(MonthlyReportReq) returns (MonthlyReportResp);
 rpc AddPaidMonthly(PaidWorkerMonthlyReq) returns (PaidWorkerMonthlyResp);
 rpc UpdateWorker(UpdateWorkerReq) returns (UpdateWorkerResp);
 rpc DeleteWorker(DeleteWorkerReq) returns (DeleteWorkerResp);
+rpc GetDailyProductionWorkersById(GetDailyProductionWorkersByIdReq) returns (GetDailyProductionWorkersByIdResp);
 }
 
 
@@ -76,19 +77,21 @@ string year = 3;
 }
 
 message EndDayData{
-string date = 1;
-int32 count_blocks = 2;
-int32 workers_count = 3;
-string worker_share = 4;
-string total_price = 5;
+string id = 1;
+string date = 2;
+int32 count_blocks = 3;
+int32 workers_count = 4;
+string worker_share = 5;
+string total_price = 6;
 }
 
 message LoadBlocksData{
-string date = 1;
-int32 count_blocks = 2;
-int32 workers_count = 3;
-string blocks_per_worker = 4;
-string total_price = 5;
+string id = 1;
+string date = 2;
+int32 count_blocks = 3;
+int32 workers_count = 4;
+string blocks_per_worker = 5;
+string total_price = 6;
 }
 message PaidMonthly{
 string date = 1;
@@ -137,4 +140,14 @@ message DeleteWorkerReq{
 message DeleteWorkerResp{
     bool status = 1;
     string message = 2;
+}
+
+message GetDailyProductionWorkersByIdReq{
+    string id = 1;
+}
+
+message GetDailyProductionWorkersByIdResp{
+    bool status = 1;
+    string message = 2;
+    repeated Worker Worker = 3;
 }

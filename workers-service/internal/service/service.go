@@ -46,3 +46,6 @@ func (s *Service) UpdateWorker(ctx context.Context, req *workerspb.UpdateWorkerR
 func (s *Service) DeleteWorker(ctx context.Context, req *workerspb.DeleteWorkerReq) (*workerspb.DeleteWorkerResp, error) {
 	return s.repo.DeleteWorker(ctx, req)
 }
+func (s *Service) GetDailyProductionWorkersById(ctx context.Context, req *workerspb.GetDailyProductionWorkersByIdReq) (*workerspb.GetDailyProductionWorkersByIdResp, error) {
+	return s.repo.GetDailyProductionWorkersById(ctx, req)
+}

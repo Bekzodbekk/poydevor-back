@@ -43,6 +43,9 @@ func (s *ServiceRepositoryClient) AddPaidMonthly(ctx context.Context, req *worke
 func (s *ServiceRepositoryClient) UpdateWorker(ctx context.Context, req *workerspb.UpdateWorkerReq) (*workerspb.UpdateWorkerResp, error) {
 	return s.WorkersServiceClient.UpdateWorker(ctx, req)
 }
+func (s *ServiceRepositoryClient) GetDailyProductionWorkersById(ctx context.Context, req *workerspb.GetDailyProductionWorkersByIdReq) (*workerspb.GetDailyProductionWorkersByIdResp, error) {
+	return s.WorkersServiceClient.GetDailyProductionWorkersById(ctx, req)
+}
 
 // Users Service
 func (s *ServiceRepositoryClient) Login(ctx context.Context, req *userspb.LoginReq) (*userspb.LoginResp, error) {

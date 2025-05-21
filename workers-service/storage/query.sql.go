@@ -87,6 +87,7 @@ const endDayDataMonthlyReport = `-- name: EndDayDataMonthlyReport :many
 WITH worker_blocks AS (
     -- Get all production IDs where the worker participated
     SELECT 
+        dp.id,
         dpw.daily_production_id,
         dp.date,
         dp.count_blocks
@@ -190,6 +191,50 @@ func (q *Queries) EndDayWorkers(ctx context.Context, arg EndDayWorkersParams) er
 	return err
 }
 
+const getDailyProductionWorkersNameById = `-- name: GetDailyProductionWorkersNameById :many
+SELECT 
+    w.id,
+    w.first_name,
+    w.last_name
+FROM 
+    daily_production_workers dpw
+JOIN 
+    workers w ON dpw.worker_id = w.id
+WHERE 
+    dpw.daily_production_id = $1 
+    AND dpw.deleted_at = 0
+    AND w.deleted_at = 0
+`
+
+type GetDailyProductionWorkersNameByIdRow struct {
+	ID        int32
+	FirstName string
+	LastName  string
+}
+
+func (q *Queries) GetDailyProductionWorkersNameById(ctx context.Context, dailyProductionID int32) ([]GetDailyProductionWorkersNameByIdRow, error) {
+	rows, err := q.db.QueryContext(ctx, getDailyProductionWorkersNameById, dailyProductionID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetDailyProductionWorkersNameByIdRow
+	for rows.Next() {
+		var i GetDailyProductionWorkersNameByIdRow
+		if err := rows.Scan(&i.ID, &i.FirstName, &i.LastName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getWorkers = `-- name: GetWorkers :many
 SELECT 
     id, first_name, last_name, phone, created_at, updated_at, deleted_at
@@ -250,6 +295,7 @@ func (q *Queries) LoadBlockWorkers(ctx context.Context, arg LoadBlockWorkersPara
 const loadBlocksDataMonthlyReport = `-- name: LoadBlocksDataMonthlyReport :many
 WITH worker_payments AS (
     SELECT
+        sb.id,
         lp.worker_id,
         sb.date,
         sb.count_blocks AS total_blocks,
@@ -272,6 +318,7 @@ WITH worker_payments AS (
         lp.worker_id, sb.id, sb.date, sb.count_blocks, sb.address, sb.load_price
 )
 SELECT 
+    id as send_block_id,
     worker_id,
     date,
     address,
@@ -292,6 +339,7 @@ type LoadBlocksDataMonthlyReportParams struct {
 }
 
 type LoadBlocksDataMonthlyReportRow struct {
+	SendBlockID     int32
 	WorkerID        int32
 	Date            time.Time
 	Address         string
@@ -313,6 +361,7 @@ func (q *Queries) LoadBlocksDataMonthlyReport(ctx context.Context, arg LoadBlock
 	for rows.Next() {
 		var i LoadBlocksDataMonthlyReportRow
 		if err := rows.Scan(
+			&i.SendBlockID,
 			&i.WorkerID,
 			&i.Date,
 			&i.Address,

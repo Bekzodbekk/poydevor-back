@@ -33,7 +33,6 @@ func (h *HandlersST) AllWorkers(ctx *gin.Context) {
 
 	ctx.JSON(200, resp)
 }
-
 func (h *HandlersST) EndDay(ctx *gin.Context) {
 	req := workerspb.EndDayReq{}
 
@@ -50,7 +49,6 @@ func (h *HandlersST) EndDay(ctx *gin.Context) {
 
 	ctx.JSON(200, resp)
 }
-
 func (h *HandlersST) LoadBlocks(ctx *gin.Context) {
 	req := workerspb.LoadBlocksReq{}
 
@@ -67,7 +65,6 @@ func (h *HandlersST) LoadBlocks(ctx *gin.Context) {
 
 	ctx.JSON(200, resp)
 }
-
 func (h *HandlersST) MonthlyReport(ctx *gin.Context) {
 	workerId := ctx.Query("worker_id")
 	month := ctx.Query("month")
@@ -85,7 +82,6 @@ func (h *HandlersST) MonthlyReport(ctx *gin.Context) {
 
 	ctx.JSON(200, resp)
 }
-
 func (h *HandlersST) AddPaidMonthly(ctx *gin.Context) {
 	workerId := ctx.Param("worker_id")
 	req := workerspb.PaidWorkerMonthlyReq{}
@@ -108,7 +104,6 @@ func (h *HandlersST) AddPaidMonthly(ctx *gin.Context) {
 
 	ctx.JSON(200, resp)
 }
-
 func (h *HandlersST) UpdateWorker(ctx *gin.Context) {
 	id := ctx.Param("worker_id")
 	worker := workerspb.UpdateWorkerReq{}
@@ -134,5 +129,17 @@ func (h *HandlersST) DeleteWorker(ctx *gin.Context) {
 		ctx.JSON(400, err.Error())
 		return
 	}
+	ctx.JSON(200, resp)
+}
+func (h *HandlersST) GetDailyProductionWorkersById(ctx *gin.Context) {
+	id := ctx.Param("dailyproductionid")
+	resp, err := h.service.GetDailyProductionWorkersById(ctx, &workerspb.GetDailyProductionWorkersByIdReq{
+		Id: id,
+	})
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
 	ctx.JSON(200, resp)
 }

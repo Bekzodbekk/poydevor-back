@@ -187,7 +187,9 @@ func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyR
 	endDayData := []*workerspb.EndDayData{}
 
 	for _, elm := range endDayResp {
+		id := strconv.Itoa(int(elm.DailyProductionID))
 		endDay := workerspb.EndDayData{
+			Id:           id,
 			Date:         elm.Date.GoString(),
 			CountBlocks:  elm.TotalBlocks,
 			WorkersCount: int32(elm.WorkerCount),
@@ -207,7 +209,9 @@ func (w *WorkersREPO) MonthlyReport(ctx context.Context, req *workerspb.MonthlyR
 		return nil, err
 	}
 	for _, elm := range loadBlocksDataResp {
+		id := strconv.Itoa(int(elm.SendBlockID))
 		loadBlocks := workerspb.LoadBlocksData{
+			Id:              id,
 			Date:            elm.Date.GoString(),
 			CountBlocks:     elm.TotalBlocks,
 			WorkersCount:    int32(elm.WorkerCount),
@@ -299,4 +303,34 @@ func (w *WorkersREPO) DeleteWorker(ctx context.Context, req *workerspb.DeleteWor
 		Message: "Delete Worker Successfuly",
 	}, nil
 
+}
+
+func (w *WorkersREPO) GetDailyProductionWorkersById(ctx context.Context, req *workerspb.GetDailyProductionWorkersByIdReq) (*workerspb.GetDailyProductionWorkersByIdResp, error) {
+	id, err := strconv.Atoi(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := w.queries.GetDailyProductionWorkersNameById(ctx, int32(id))
+	if err != nil {
+		return nil, err
+	}
+
+	workersData := []*workerspb.Worker{}
+	for _, elm := range resp {
+		id := strconv.Itoa(int(elm.ID))
+		worker := workerspb.Worker{
+			Id:        id,
+			FirstName: elm.FirstName,
+			LastName:  elm.LastName,
+		}
+
+		workersData = append(workersData, &worker)
+	}
+
+	return &workerspb.GetDailyProductionWorkersByIdResp{
+		Status:  true,
+		Message: "Workers GET Successfuly",
+		Worker:  workersData,
+	}, nil
 }
