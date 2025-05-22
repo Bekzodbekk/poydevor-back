@@ -334,3 +334,32 @@ func (w *WorkersREPO) GetDailyProductionWorkersById(ctx context.Context, req *wo
 		Worker:  workersData,
 	}, nil
 }
+func (w *WorkersREPO) GetLoadProductionWorkersById(ctx context.Context, req *workerspb.GetLoadProductionWorkersByIdReq) (*workerspb.GetLoadProductionWorkersByIdResp, error) {
+	id, err := strconv.Atoi(req.Id)
+	if err != nil {
+		return nil, err
+	}
+
+	resp, err := w.queries.GetLoadProductionWorkersNameById(ctx, int32(id))
+	if err != nil {
+		return nil, err
+	}
+
+	workersData := []*workerspb.Worker{}
+	for _, elm := range resp {
+		id := strconv.Itoa(int(elm.ID))
+		worker := workerspb.Worker{
+			Id:        id,
+			FirstName: elm.FirstName,
+			LastName:  elm.LastName,
+		}
+
+		workersData = append(workersData, &worker)
+	}
+
+	return &workerspb.GetLoadProductionWorkersByIdResp{
+		Status:  true,
+		Message: "Workers GET Successfuly",
+		Worker:  workersData,
+	}, nil
+}

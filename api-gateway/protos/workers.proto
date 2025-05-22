@@ -12,6 +12,7 @@ rpc AddPaidMonthly(PaidWorkerMonthlyReq) returns (PaidWorkerMonthlyResp);
 rpc UpdateWorker(UpdateWorkerReq) returns (UpdateWorkerResp);
 rpc DeleteWorker(DeleteWorkerReq) returns (DeleteWorkerResp);
 rpc GetDailyProductionWorkersById(GetDailyProductionWorkersByIdReq) returns (GetDailyProductionWorkersByIdResp);
+rpc GetLoadProductionWorkersById(GetLoadProductionWorkersByIdReq) returns (GetLoadProductionWorkersByIdResp);
 }
 
 
@@ -62,6 +63,7 @@ int64 count_blocks = 4;
 int64 price_block = 5;
 repeated int32  workers = 6;
 }
+
 message LoadBlocksResp{
 bool status = 1;
 string message = 2;
@@ -147,6 +149,15 @@ message GetDailyProductionWorkersByIdReq{
 }
 
 message GetDailyProductionWorkersByIdResp{
+    bool status = 1;
+    string message = 2;
+    repeated Worker Worker = 3;
+}
+
+message GetLoadProductionWorkersByIdReq{
+    string id = 1;
+}
+message GetLoadProductionWorkersByIdResp{
     bool status = 1;
     string message = 2;
     repeated Worker Worker = 3;

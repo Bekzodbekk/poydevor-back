@@ -172,3 +172,17 @@ WHERE
     dpw.daily_production_id = $1 
     AND dpw.deleted_at = 0
     AND w.deleted_at = 0;
+
+-- name: GetLoadProductionWorkersNameById :many
+SELECT 
+    w.id,
+    w.first_name,
+    w.last_name
+FROM 
+    load_production lp
+JOIN 
+    workers w ON lp.worker_id = w.id
+WHERE 
+    lp.send_block_id = $1
+    AND lp.deleted_at = 0
+    AND w.deleted_at = 0;

@@ -28,6 +28,7 @@ const (
 	WorkersService_UpdateWorker_FullMethodName                  = "/WorkersService/UpdateWorker"
 	WorkersService_DeleteWorker_FullMethodName                  = "/WorkersService/DeleteWorker"
 	WorkersService_GetDailyProductionWorkersById_FullMethodName = "/WorkersService/GetDailyProductionWorkersById"
+	WorkersService_GetLoadProductionWorkersById_FullMethodName  = "/WorkersService/GetLoadProductionWorkersById"
 )
 
 // WorkersServiceClient is the client API for WorkersService service.
@@ -43,6 +44,7 @@ type WorkersServiceClient interface {
 	UpdateWorker(ctx context.Context, in *UpdateWorkerReq, opts ...grpc.CallOption) (*UpdateWorkerResp, error)
 	DeleteWorker(ctx context.Context, in *DeleteWorkerReq, opts ...grpc.CallOption) (*DeleteWorkerResp, error)
 	GetDailyProductionWorkersById(ctx context.Context, in *GetDailyProductionWorkersByIdReq, opts ...grpc.CallOption) (*GetDailyProductionWorkersByIdResp, error)
+	GetLoadProductionWorkersById(ctx context.Context, in *GetLoadProductionWorkersByIdReq, opts ...grpc.CallOption) (*GetLoadProductionWorkersByIdResp, error)
 }
 
 type workersServiceClient struct {
@@ -143,6 +145,16 @@ func (c *workersServiceClient) GetDailyProductionWorkersById(ctx context.Context
 	return out, nil
 }
 
+func (c *workersServiceClient) GetLoadProductionWorkersById(ctx context.Context, in *GetLoadProductionWorkersByIdReq, opts ...grpc.CallOption) (*GetLoadProductionWorkersByIdResp, error) {
+	cOpts := append([]grpc.CallOption{grpc.StaticMethod()}, opts...)
+	out := new(GetLoadProductionWorkersByIdResp)
+	err := c.cc.Invoke(ctx, WorkersService_GetLoadProductionWorkersById_FullMethodName, in, out, cOpts...)
+	if err != nil {
+		return nil, err
+	}
+	return out, nil
+}
+
 // WorkersServiceServer is the server API for WorkersService service.
 // All implementations must embed UnimplementedWorkersServiceServer
 // for forward compatibility.
@@ -156,6 +168,7 @@ type WorkersServiceServer interface {
 	UpdateWorker(context.Context, *UpdateWorkerReq) (*UpdateWorkerResp, error)
 	DeleteWorker(context.Context, *DeleteWorkerReq) (*DeleteWorkerResp, error)
 	GetDailyProductionWorkersById(context.Context, *GetDailyProductionWorkersByIdReq) (*GetDailyProductionWorkersByIdResp, error)
+	GetLoadProductionWorkersById(context.Context, *GetLoadProductionWorkersByIdReq) (*GetLoadProductionWorkersByIdResp, error)
 	mustEmbedUnimplementedWorkersServiceServer()
 }
 
@@ -192,6 +205,9 @@ func (UnimplementedWorkersServiceServer) DeleteWorker(context.Context, *DeleteWo
 }
 func (UnimplementedWorkersServiceServer) GetDailyProductionWorkersById(context.Context, *GetDailyProductionWorkersByIdReq) (*GetDailyProductionWorkersByIdResp, error) {
 	return nil, status.Errorf(codes.Unimplemented, "method GetDailyProductionWorkersById not implemented")
+}
+func (UnimplementedWorkersServiceServer) GetLoadProductionWorkersById(context.Context, *GetLoadProductionWorkersByIdReq) (*GetLoadProductionWorkersByIdResp, error) {
+	return nil, status.Errorf(codes.Unimplemented, "method GetLoadProductionWorkersById not implemented")
 }
 func (UnimplementedWorkersServiceServer) mustEmbedUnimplementedWorkersServiceServer() {}
 func (UnimplementedWorkersServiceServer) testEmbeddedByValue()                        {}
@@ -376,6 +392,24 @@ func _WorkersService_GetDailyProductionWorkersById_Handler(srv interface{}, ctx 
 	return interceptor(ctx, in, info, handler)
 }
 
+func _WorkersService_GetLoadProductionWorkersById_Handler(srv interface{}, ctx context.Context, dec func(interface{}) error, interceptor grpc.UnaryServerInterceptor) (interface{}, error) {
+	in := new(GetLoadProductionWorkersByIdReq)
+	if err := dec(in); err != nil {
+		return nil, err
+	}
+	if interceptor == nil {
+		return srv.(WorkersServiceServer).GetLoadProductionWorkersById(ctx, in)
+	}
+	info := &grpc.UnaryServerInfo{
+		Server:     srv,
+		FullMethod: WorkersService_GetLoadProductionWorkersById_FullMethodName,
+	}
+	handler := func(ctx context.Context, req interface{}) (interface{}, error) {
+		return srv.(WorkersServiceServer).GetLoadProductionWorkersById(ctx, req.(*GetLoadProductionWorkersByIdReq))
+	}
+	return interceptor(ctx, in, info, handler)
+}
+
 // WorkersService_ServiceDesc is the grpc.ServiceDesc for WorkersService service.
 // It's only intended for direct use with grpc.RegisterService,
 // and not to be introspected or modified (even as a copy)
@@ -418,6 +452,10 @@ var WorkersService_ServiceDesc = grpc.ServiceDesc{
 		{
 			MethodName: "GetDailyProductionWorkersById",
 			Handler:    _WorkersService_GetDailyProductionWorkersById_Handler,
+		},
+		{
+			MethodName: "GetLoadProductionWorkersById",
+			Handler:    _WorkersService_GetLoadProductionWorkersById_Handler,
 		},
 	},
 	Streams:  []grpc.StreamDesc{},

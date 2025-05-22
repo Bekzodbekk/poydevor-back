@@ -27,6 +27,7 @@ func NewGin(service *service.ServiceRepositoryClient) *http.Server {
 	r.GET("/v1/workers/all-workers", newHandlers.AllWorkers)
 	r.GET("/v1/workers/monthly-report", newHandlers.MonthlyReport)
 	r.GET("/v1/workers/get-daily-production-id/:dailyproductionid", newHandlers.GetDailyProductionWorkersById)
+	r.GET("/v1/workers/get-load-production-id/:loadproductionid", newHandlers.GetLoadProductionWorkersById)
 
 	r.POST("/v1/users/login", newHandlers.Login)
 	r.GET("/v1/check_me", newHandlers.CheckToken)

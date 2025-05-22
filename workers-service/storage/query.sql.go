@@ -235,6 +235,50 @@ func (q *Queries) GetDailyProductionWorkersNameById(ctx context.Context, dailyPr
 	return items, nil
 }
 
+const getLoadProductionWorkersNameById = `-- name: GetLoadProductionWorkersNameById :many
+SELECT 
+    w.id,
+    w.first_name,
+    w.last_name
+FROM 
+    load_production lp
+JOIN 
+    workers w ON lp.worker_id = w.id
+WHERE 
+    lp.send_block_id = $1
+    AND lp.deleted_at = 0
+    AND w.deleted_at = 0
+`
+
+type GetLoadProductionWorkersNameByIdRow struct {
+	ID        int32
+	FirstName string
+	LastName  string
+}
+
+func (q *Queries) GetLoadProductionWorkersNameById(ctx context.Context, sendBlockID int32) ([]GetLoadProductionWorkersNameByIdRow, error) {
+	rows, err := q.db.QueryContext(ctx, getLoadProductionWorkersNameById, sendBlockID)
+	if err != nil {
+		return nil, err
+	}
+	defer rows.Close()
+	var items []GetLoadProductionWorkersNameByIdRow
+	for rows.Next() {
+		var i GetLoadProductionWorkersNameByIdRow
+		if err := rows.Scan(&i.ID, &i.FirstName, &i.LastName); err != nil {
+			return nil, err
+		}
+		items = append(items, i)
+	}
+	if err := rows.Close(); err != nil {
+		return nil, err
+	}
+	if err := rows.Err(); err != nil {
+		return nil, err
+	}
+	return items, nil
+}
+
 const getWorkers = `-- name: GetWorkers :many
 SELECT 
     id, first_name, last_name, phone, created_at, updated_at, deleted_at

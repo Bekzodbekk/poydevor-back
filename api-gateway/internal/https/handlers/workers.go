@@ -143,3 +143,15 @@ func (h *HandlersST) GetDailyProductionWorkersById(ctx *gin.Context) {
 
 	ctx.JSON(200, resp)
 }
+func (h *HandlersST) GetLoadProductionWorkersById(ctx *gin.Context) {
+	id := ctx.Param("loadproductionid")
+	resp, err := h.service.GetLoadProductionWorkersById(ctx, &workerspb.GetLoadProductionWorkersByIdReq{
+		Id: id,
+	})
+	if err != nil {
+		ctx.JSON(400, err.Error())
+		return
+	}
+
+	ctx.JSON(200, resp)
+}

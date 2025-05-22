@@ -1320,6 +1320,110 @@ func (x *GetDailyProductionWorkersByIdResp) GetWorker() []*Worker {
 	return nil
 }
 
+type GetLoadProductionWorkersByIdReq struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Id            string                 `protobuf:"bytes,1,opt,name=id,proto3" json:"id,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetLoadProductionWorkersByIdReq) Reset() {
+	*x = GetLoadProductionWorkersByIdReq{}
+	mi := &file_protos_workers_proto_msgTypes[22]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetLoadProductionWorkersByIdReq) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetLoadProductionWorkersByIdReq) ProtoMessage() {}
+
+func (x *GetLoadProductionWorkersByIdReq) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_workers_proto_msgTypes[22]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetLoadProductionWorkersByIdReq.ProtoReflect.Descriptor instead.
+func (*GetLoadProductionWorkersByIdReq) Descriptor() ([]byte, []int) {
+	return file_protos_workers_proto_rawDescGZIP(), []int{22}
+}
+
+func (x *GetLoadProductionWorkersByIdReq) GetId() string {
+	if x != nil {
+		return x.Id
+	}
+	return ""
+}
+
+type GetLoadProductionWorkersByIdResp struct {
+	state         protoimpl.MessageState `protogen:"open.v1"`
+	Status        bool                   `protobuf:"varint,1,opt,name=status,proto3" json:"status,omitempty"`
+	Message       string                 `protobuf:"bytes,2,opt,name=message,proto3" json:"message,omitempty"`
+	Worker        []*Worker              `protobuf:"bytes,3,rep,name=Worker,proto3" json:"Worker,omitempty"`
+	unknownFields protoimpl.UnknownFields
+	sizeCache     protoimpl.SizeCache
+}
+
+func (x *GetLoadProductionWorkersByIdResp) Reset() {
+	*x = GetLoadProductionWorkersByIdResp{}
+	mi := &file_protos_workers_proto_msgTypes[23]
+	ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+	ms.StoreMessageInfo(mi)
+}
+
+func (x *GetLoadProductionWorkersByIdResp) String() string {
+	return protoimpl.X.MessageStringOf(x)
+}
+
+func (*GetLoadProductionWorkersByIdResp) ProtoMessage() {}
+
+func (x *GetLoadProductionWorkersByIdResp) ProtoReflect() protoreflect.Message {
+	mi := &file_protos_workers_proto_msgTypes[23]
+	if x != nil {
+		ms := protoimpl.X.MessageStateOf(protoimpl.Pointer(x))
+		if ms.LoadMessageInfo() == nil {
+			ms.StoreMessageInfo(mi)
+		}
+		return ms
+	}
+	return mi.MessageOf(x)
+}
+
+// Deprecated: Use GetLoadProductionWorkersByIdResp.ProtoReflect.Descriptor instead.
+func (*GetLoadProductionWorkersByIdResp) Descriptor() ([]byte, []int) {
+	return file_protos_workers_proto_rawDescGZIP(), []int{23}
+}
+
+func (x *GetLoadProductionWorkersByIdResp) GetStatus() bool {
+	if x != nil {
+		return x.Status
+	}
+	return false
+}
+
+func (x *GetLoadProductionWorkersByIdResp) GetMessage() string {
+	if x != nil {
+		return x.Message
+	}
+	return ""
+}
+
+func (x *GetLoadProductionWorkersByIdResp) GetWorker() []*Worker {
+	if x != nil {
+		return x.Worker
+	}
+	return nil
+}
+
 var File_protos_workers_proto protoreflect.FileDescriptor
 
 const file_protos_workers_proto_rawDesc = "" +
@@ -1419,7 +1523,13 @@ const file_protos_workers_proto_rawDesc = "" +
 	"!GetDailyProductionWorkersByIdResp\x12\x16\n" +
 	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +
 	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1f\n" +
-	"\x06Worker\x18\x03 \x03(\v2\a.WorkerR\x06Worker2\x8b\x04\n" +
+	"\x06Worker\x18\x03 \x03(\v2\a.WorkerR\x06Worker\"1\n" +
+	"\x1fGetLoadProductionWorkersByIdReq\x12\x0e\n" +
+	"\x02id\x18\x01 \x01(\tR\x02id\"u\n" +
+	" GetLoadProductionWorkersByIdResp\x12\x16\n" +
+	"\x06status\x18\x01 \x01(\bR\x06status\x12\x18\n" +
+	"\amessage\x18\x02 \x01(\tR\amessage\x12\x1f\n" +
+	"\x06Worker\x18\x03 \x03(\v2\a.WorkerR\x06Worker2\xf0\x04\n" +
 	"\x0eWorkersService\x12-\n" +
 	"\n" +
 	"AddWorkers\x12\x0e.AddWorkersReq\x1a\x0f.AddWorkersResp\x12-\n" +
@@ -1433,7 +1543,8 @@ const file_protos_workers_proto_rawDesc = "" +
 	"\x0eAddPaidMonthly\x12\x15.PaidWorkerMonthlyReq\x1a\x16.PaidWorkerMonthlyResp\x123\n" +
 	"\fUpdateWorker\x12\x10.UpdateWorkerReq\x1a\x11.UpdateWorkerResp\x123\n" +
 	"\fDeleteWorker\x12\x10.DeleteWorkerReq\x1a\x11.DeleteWorkerResp\x12f\n" +
-	"\x1dGetDailyProductionWorkersById\x12!.GetDailyProductionWorkersByIdReq\x1a\".GetDailyProductionWorkersByIdRespB\x14Z\x12genproto/workerspbb\x06proto3"
+	"\x1dGetDailyProductionWorkersById\x12!.GetDailyProductionWorkersByIdReq\x1a\".GetDailyProductionWorkersByIdResp\x12c\n" +
+	"\x1cGetLoadProductionWorkersById\x12 .GetLoadProductionWorkersByIdReq\x1a!.GetLoadProductionWorkersByIdRespB\x14Z\x12genproto/workerspbb\x06proto3"
 
 var (
 	file_protos_workers_proto_rawDescOnce sync.Once
@@ -1447,7 +1558,7 @@ func file_protos_workers_proto_rawDescGZIP() []byte {
 	return file_protos_workers_proto_rawDescData
 }
 
-var file_protos_workers_proto_msgTypes = make([]protoimpl.MessageInfo, 22)
+var file_protos_workers_proto_msgTypes = make([]protoimpl.MessageInfo, 24)
 var file_protos_workers_proto_goTypes = []any{
 	(*AddWorkersReq)(nil),                     // 0: AddWorkersReq
 	(*AddWorkersResp)(nil),                    // 1: AddWorkersResp
@@ -1471,6 +1582,8 @@ var file_protos_workers_proto_goTypes = []any{
 	(*DeleteWorkerResp)(nil),                  // 19: DeleteWorkerResp
 	(*GetDailyProductionWorkersByIdReq)(nil),  // 20: GetDailyProductionWorkersByIdReq
 	(*GetDailyProductionWorkersByIdResp)(nil), // 21: GetDailyProductionWorkersByIdResp
+	(*GetLoadProductionWorkersByIdReq)(nil),   // 22: GetLoadProductionWorkersByIdReq
+	(*GetLoadProductionWorkersByIdResp)(nil),  // 23: GetLoadProductionWorkersByIdResp
 }
 var file_protos_workers_proto_depIdxs = []int32{
 	2,  // 0: GetWorkersResp.workers:type_name -> Worker
@@ -1478,29 +1591,32 @@ var file_protos_workers_proto_depIdxs = []int32{
 	11, // 2: MonthlyReportResp.load_blocks_data:type_name -> LoadBlocksData
 	12, // 3: MonthlyReportResp.paid_monthly:type_name -> PaidMonthly
 	2,  // 4: GetDailyProductionWorkersByIdResp.Worker:type_name -> Worker
-	0,  // 5: WorkersService.AddWorkers:input_type -> AddWorkersReq
-	3,  // 6: WorkersService.GetWorkers:input_type -> GetWorkersReq
-	5,  // 7: WorkersService.EndDay:input_type -> EndDayReq
-	7,  // 8: WorkersService.LoadBlocks:input_type -> LoadBlocksReq
-	9,  // 9: WorkersService.MonthlyReport:input_type -> MonthlyReportReq
-	14, // 10: WorkersService.AddPaidMonthly:input_type -> PaidWorkerMonthlyReq
-	16, // 11: WorkersService.UpdateWorker:input_type -> UpdateWorkerReq
-	18, // 12: WorkersService.DeleteWorker:input_type -> DeleteWorkerReq
-	20, // 13: WorkersService.GetDailyProductionWorkersById:input_type -> GetDailyProductionWorkersByIdReq
-	1,  // 14: WorkersService.AddWorkers:output_type -> AddWorkersResp
-	4,  // 15: WorkersService.GetWorkers:output_type -> GetWorkersResp
-	6,  // 16: WorkersService.EndDay:output_type -> EndDayResp
-	8,  // 17: WorkersService.LoadBlocks:output_type -> LoadBlocksResp
-	13, // 18: WorkersService.MonthlyReport:output_type -> MonthlyReportResp
-	15, // 19: WorkersService.AddPaidMonthly:output_type -> PaidWorkerMonthlyResp
-	17, // 20: WorkersService.UpdateWorker:output_type -> UpdateWorkerResp
-	19, // 21: WorkersService.DeleteWorker:output_type -> DeleteWorkerResp
-	21, // 22: WorkersService.GetDailyProductionWorkersById:output_type -> GetDailyProductionWorkersByIdResp
-	14, // [14:23] is the sub-list for method output_type
-	5,  // [5:14] is the sub-list for method input_type
-	5,  // [5:5] is the sub-list for extension type_name
-	5,  // [5:5] is the sub-list for extension extendee
-	0,  // [0:5] is the sub-list for field type_name
+	2,  // 5: GetLoadProductionWorkersByIdResp.Worker:type_name -> Worker
+	0,  // 6: WorkersService.AddWorkers:input_type -> AddWorkersReq
+	3,  // 7: WorkersService.GetWorkers:input_type -> GetWorkersReq
+	5,  // 8: WorkersService.EndDay:input_type -> EndDayReq
+	7,  // 9: WorkersService.LoadBlocks:input_type -> LoadBlocksReq
+	9,  // 10: WorkersService.MonthlyReport:input_type -> MonthlyReportReq
+	14, // 11: WorkersService.AddPaidMonthly:input_type -> PaidWorkerMonthlyReq
+	16, // 12: WorkersService.UpdateWorker:input_type -> UpdateWorkerReq
+	18, // 13: WorkersService.DeleteWorker:input_type -> DeleteWorkerReq
+	20, // 14: WorkersService.GetDailyProductionWorkersById:input_type -> GetDailyProductionWorkersByIdReq
+	22, // 15: WorkersService.GetLoadProductionWorkersById:input_type -> GetLoadProductionWorkersByIdReq
+	1,  // 16: WorkersService.AddWorkers:output_type -> AddWorkersResp
+	4,  // 17: WorkersService.GetWorkers:output_type -> GetWorkersResp
+	6,  // 18: WorkersService.EndDay:output_type -> EndDayResp
+	8,  // 19: WorkersService.LoadBlocks:output_type -> LoadBlocksResp
+	13, // 20: WorkersService.MonthlyReport:output_type -> MonthlyReportResp
+	15, // 21: WorkersService.AddPaidMonthly:output_type -> PaidWorkerMonthlyResp
+	17, // 22: WorkersService.UpdateWorker:output_type -> UpdateWorkerResp
+	19, // 23: WorkersService.DeleteWorker:output_type -> DeleteWorkerResp
+	21, // 24: WorkersService.GetDailyProductionWorkersById:output_type -> GetDailyProductionWorkersByIdResp
+	23, // 25: WorkersService.GetLoadProductionWorkersById:output_type -> GetLoadProductionWorkersByIdResp
+	16, // [16:26] is the sub-list for method output_type
+	6,  // [6:16] is the sub-list for method input_type
+	6,  // [6:6] is the sub-list for extension type_name
+	6,  // [6:6] is the sub-list for extension extendee
+	0,  // [0:6] is the sub-list for field type_name
 }
 
 func init() { file_protos_workers_proto_init() }
@@ -1514,7 +1630,7 @@ func file_protos_workers_proto_init() {
 			GoPackagePath: reflect.TypeOf(x{}).PkgPath(),
 			RawDescriptor: unsafe.Slice(unsafe.StringData(file_protos_workers_proto_rawDesc), len(file_protos_workers_proto_rawDesc)),
 			NumEnums:      0,
-			NumMessages:   22,
+			NumMessages:   24,
 			NumExtensions: 0,
 			NumServices:   1,
 		},
